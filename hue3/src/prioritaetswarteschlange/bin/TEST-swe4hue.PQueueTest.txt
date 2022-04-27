@@ -1,0 +1,2 @@
+Testcase: swe4hue.PQueueTest
+Tests run: 5, Failures: 0, Skipped: 0, Aborted: 0, Time elapsed: 71 milli sec(s)

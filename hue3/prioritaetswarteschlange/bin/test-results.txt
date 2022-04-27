@@ -1,0 +1,6 @@
+Testcase: swe4hue.PQueueTest
+Test: enqueue() took 8 milli sec(s)
+Test: peek() took 0 milli sec(s)
+Test: dequeue() took 0 milli sec(s)
+Test: isEmpty() took 0 milli sec(s)
+Tests run: 4, Failures: 0, Skipped: 0, Aborted: 0, Time elapsed: 17 milli sec(s)

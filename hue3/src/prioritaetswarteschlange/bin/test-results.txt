@@ -1,0 +1,7 @@
+Testcase: swe4hue.PQueueTest
+Test: enqueue() took 36 milli sec(s)
+Test: peek() took 1 milli sec(s)
+Test: CompareWithJDKpQueue() took 22 milli sec(s)
+Test: dequeue() took 4 milli sec(s)
+Test: isEmpty() took 0 milli sec(s)
+Tests run: 5, Failures: 0, Skipped: 0, Aborted: 0, Time elapsed: 71 milli sec(s)

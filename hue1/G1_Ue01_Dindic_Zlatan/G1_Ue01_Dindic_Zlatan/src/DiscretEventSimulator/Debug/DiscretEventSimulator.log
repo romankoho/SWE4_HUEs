@@ -1,0 +1,3 @@
+﻿  Main.cpp
+C:\Users\Zlatan\OneDrive\Desktop\ZlatanFH\LVA\Semester4\SWE\Übung\Hausübungen\HÜ1\DiscretEventSimulator\DiscretEventSimulator\Main.cpp(37,13): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  DiscretEventSimulator.vcxproj -> C:\Users\Zlatan\OneDrive\Desktop\ZlatanFH\LVA\Semester4\SWE\Übung\Hausübungen\HÜ1\DiscretEventSimulator\Debug\DiscretEventSimulator.exe
