@@ -77,10 +77,6 @@ public class DHeapQueue<T extends Comparable<T>> implements  PQueue<T>{
     values.set(i, x);
   }
 
-<<<<<<<< HEAD:hue3/src/prioritaetswarteschlange/src/swe4hue/DHeapQueue.java
-
-========
->>>>>>>> origin/master:hue3/prioritaetswarteschlange/src/swe4hue/DHeapQueue.java
   private int getIndexOfGreatestChild(int i) {
     int indexOfMaxChild = kthChild(i,1);
 
@@ -139,11 +135,7 @@ public class DHeapQueue<T extends Comparable<T>> implements  PQueue<T>{
   }
 
   public static void main(String[] args) {
-<<<<<<<< HEAD:hue3/src/prioritaetswarteschlange/src/swe4hue/DHeapQueue.java
-    System.out.println("For detailed tests see JUnit test class");
-========
     System.out.println("DHeap testing");
->>>>>>>> origin/master:hue3/prioritaetswarteschlange/src/swe4hue/DHeapQueue.java
     DHeapQueue<Integer> h = new DHeapQueue<>(5);
     Random r = new Random();
     for(int i = 0; i < 20; i++) {

@@ -23,13 +23,8 @@ class PQueueTest {
 
   @BeforeEach
   void setUp() {
-<<<<<<<< HEAD:hue3/src/prioritaetswarteschlange/test/swe4hue/PQueueTest.java
-    //data = new Heap<>();
-    data = new DHeapQueue<>(5);
-========
     data = new Heap<>();
     //data = new DHeapQueue<>(1000);
->>>>>>>> origin/master:hue3/prioritaetswarteschlange/test/swe4hue/PQueueTest.java
   }
 
   @AfterEach
