@@ -1,0 +1,94 @@
+<!-- file: build.xml -->
+
+<project name="SlidingPuzzle" default="junit" basedir=".">
+
+  <property name="main.class" value="at.fhooe.swe4.slidingpuzzle" />
+  <property name="program.jar" value="SlidingPuzzle.jar" />
+  <property name="bin.dir" value="bin" />
+  <property name="src.dir" value="src" />
+  <property name="test.dir" value="test" />
+
+  <property environment="env"/>
+  <property name="ANT_HOME" value="${env.ANT_HOME}"/>
+
+  <taskdef name="junitlauncher"
+    classname="org.apache.tools.ant.taskdefs.optional.junitlauncher.confined.JUnitLauncherTask">
+  </taskdef>
+
+  <path id="classpath.test">
+    <pathelement location="bin" />
+    <fileset dir="${ANT_HOME}/lib">
+      <include name="**/*.jar" />
+    </fileset>
+    <fileset dir="lib">
+      <include name="**/*.jar" />
+    </fileset>
+    <pathelement path=""/>
+  </path>
+
+  <target name="create-bin" description="creates output directory">
+    <mkdir dir="bin" />
+  </target>
+
+  <target name="compile" depends="create-bin" description="Compile Java sources">
+    <javac srcdir="src" destdir="bin" includeantruntime="false">
+      <include name="**/*.java" />
+    </javac>
+  </target>
+
+  <target name="run" depends="compile" description="Run Java Application">
+    <java classname="${main.class}" fork="true" classpath="${bin.dir}">
+      <assertions>  <enable />  </assertions>
+    </java>
+  </target>
+
+  <target name="jar" depends="compile" description="Create Java Package">
+    <jar destfile="${program.jar}">
+      <fileset dir="bin" includes="**/*.class" />
+      <manifest>
+        <attribute name="main-class" value="${main.class}" />
+      </manifest>
+    </jar>
+  </target>
+
+  <target name="runjar" depends="jar" description="Run the JAR">
+    <java jar="${program.jar}" fork="true" classpath=".">
+      <assertions>  <enable />  </assertions>
+    </java>
+  </target>
+
+  <target name="compile-tests" depends="create-bin, compile">
+    <javac srcdir="${test.dir}"
+           destdir="bin"
+           includeantruntime="false">
+      <classpath refid="classpath.test" />
+    </javac>
+  </target>
+
+  <target name="junit"
+          depends="compile-tests"
+          description="Run all unit tests">
+    <junitlauncher printSummary="true">
+      <classpath refid="classpath.test"/>
+      <testclasses outputdir="${bin.dir}">
+        <fileset dir="bin">
+          <include name="**/*Test*" />
+        </fileset>
+        <listener type="legacy-brief" sendSysOut="true"/>
+        <listener type="legacy-xml" sendSysErr="true" sendSysOut="true"/>
+        <listener type="legacy-plain"
+                  sendSysErr="true"
+                  sendSysOut="true"
+                  resultFile="test-results.txt" />
+      </testclasses>
+    </junitlauncher>
+  </target>
+
+
+  <target name="clean" description="Delete all build artefacts">
+    <delete file="${program.jar}">
+      <fileset dir="" includes="**/*.class" />
+    </delete>
+  </target>
+
+</project>

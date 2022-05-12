@@ -1,0 +1,5 @@
+Testcase: at.fhooe.swe4.slidingpuzzle.BoardTest
+Tests run: 22, Failures: 0, Skipped: 0, Aborted: 0, Time elapsed: 94 milli sec(s)
+------------- Standard Output ---------------
+Only size 3 or 4 allowed. Board was initialized with size = 3
+------------- ---------------- ---------------

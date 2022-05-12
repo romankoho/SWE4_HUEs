@@ -1,0 +1,2 @@
+Testcase: at.fhooe.swe4.slidingpuzzle.SearchNodeTest
+Tests run: 4, Failures: 0, Skipped: 0, Aborted: 0, Time elapsed: 6 milli sec(s)
