@@ -1,4 +1,7 @@
-package at.fhooe.swe4.administration;
+package at.fhooe.swe4.administration.data;
+
+import at.fhooe.swe4.administration.enums.FederalState;
+import at.fhooe.swe4.administration.enums.Status;
 
 import java.util.Objects;
 
@@ -10,6 +13,15 @@ public class ReceivingOffice {
   private String address;
   private Status status;
 
+  public ReceivingOffice(Integer id, String name, FederalState federalState, String district,
+                         String address, Status status) {
+    this.id = id;
+    this.name = name;
+    this.federalState = federalState;
+    this.district = district;
+    this.address = address;
+    this.status = status;
+  }
 
   @Override
   public boolean equals(Object o) {
