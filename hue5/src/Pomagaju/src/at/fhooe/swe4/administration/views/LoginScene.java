@@ -1,17 +1,13 @@
-package at.fhooe.swe4.administration.scenes;
+package at.fhooe.swe4.administration.views;
 
 import at.fhooe.swe4.administration.Utilities;
-import at.fhooe.swe4.administration.data.DemandItem;
-import at.fhooe.swe4.administration.data.ReceivingOffice;
-import at.fhooe.swe4.administration.enums.FederalState;
-import at.fhooe.swe4.administration.enums.Status;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import at.fhooe.swe4.administration.controller.DemandController;
+import at.fhooe.swe4.administration.controller.OfficesController;
+import at.fhooe.swe4.administration.models.ReceivingOffice;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -20,7 +16,7 @@ import javafx.stage.Stage;
 public class LoginScene {
 
   private static Stage window;
-  private Scene loginScene;
+  private static Scene loginScene;
 
   public LoginScene(Stage window) {
     this.window = window;
@@ -32,18 +28,16 @@ public class LoginScene {
     loginScene.getStylesheets().add(getClass().getResource("/loginScene.css").toString());
   }
 
-  public Scene getLoginScene() {
+  public static Scene getLoginScene() {
     return loginScene;
   }
 
   private static TableView<ReceivingOffice> officeTable;
-  private static final ObservableList<ReceivingOffice> offices =
-          FXCollections.observableArrayList();
 
   private static TableView<ReceivingOffice> createOfficeTable() {
     TableView<ReceivingOffice> officeTable = new TableView<>();
     officeTable.setId("office-table");
-    officeTable.setItems(offices);
+    officeTable.setItems(OfficesController.getInstance().getArrayList());
 
     TableColumn<ReceivingOffice, Integer> idCol = new TableColumn<>("ID");
     TableColumn<ReceivingOffice, String> nameCol = new TableColumn<>("Name");
@@ -81,11 +75,6 @@ public class LoginScene {
     startButton.addEventHandler(ActionEvent.ACTION, (e) -> handleLoginButtonEvent(e));
 
     officeTable = createOfficeTable();
-    offices.add(new ReceivingOffice(512, "Hilfe für die Ukraine", FederalState.CARINTHIA,
-            "Spittal/Drau", "Lindenstraße 1", Status.ACTIVE));
-
-    offices.add(new ReceivingOffice(124, "Omas gegen Rechts", FederalState.VIEANNA,
-            "Wien", "Porzellangasse", Status.ACTIVE));
 
     VBox startPane = new VBox(loginInfo, officeTable, startButton);
     startPane.setId("login-screen-start-pane");
@@ -97,13 +86,18 @@ public class LoginScene {
 
     ReceivingOffice selectedOffice = officeTable.getSelectionModel().getSelectedItem();
     if(selectedOffice != null) {
+      OfficesController.getInstance().setActiveOffice(selectedOffice);
+
+      DemandController.getInstance().getFilteredDemand().setPredicate(
+              demandItem -> demandItem.getRelatedOffice().equals(OfficesController.getInstance().getActiveOffice())
+      );
+
       double x = window.getWidth();
       double y = window.getHeight();
-
       window.setWidth(x);
       window.setHeight(y);
 
-      MainScene mainScene = new MainScene(window, selectedOffice);
+      MainScene mainScene = new MainScene(window);
       window.setScene(mainScene.getMainScene());
     }
   }

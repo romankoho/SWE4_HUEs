@@ -1,0 +1,28 @@
+#button-login {
+    -fx-padding: 5;
+    -fx-min-height: 35;
+    -fx-min-width: 100;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFD600;
+    -fx-background-color: #005BBC;
+    -fx-spacing: 10;
+}
+
+#button-login:hover {
+    -fx-background-color: #1B7EE8;
+}
+
+#login-pane{
+    -fx-padding: 30;
+}
+
+#login-screen-start-pane {
+    -fx-alignment: center;
+    -fx-spacing: 20;
+}
+
+#login-screen-input-pane{
+    -fx-alignment: center;
+}
+
+

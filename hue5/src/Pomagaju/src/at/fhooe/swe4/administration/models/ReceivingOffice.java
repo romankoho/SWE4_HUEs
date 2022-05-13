@@ -1,4 +1,4 @@
-package at.fhooe.swe4.administration.data;
+package at.fhooe.swe4.administration.models;
 
 import at.fhooe.swe4.administration.enums.FederalState;
 import at.fhooe.swe4.administration.enums.Status;
@@ -24,16 +24,9 @@ public class ReceivingOffice {
   }
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    ReceivingOffice that = (ReceivingOffice) o;
-    return Objects.equals(id, that.id) && Objects.equals(name, that.name) && federalState == that.federalState && Objects.equals(district, that.district) && Objects.equals(address, that.address) && status == that.status;
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(id, name, federalState, district, address, status);
+  public String toString() {
+    return "Annahmestelle: " + id + ", "
+            + ", "+ name +", " + district + ", " + address;
   }
 
   public Integer getId() {

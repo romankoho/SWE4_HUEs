@@ -1,23 +1,30 @@
-package at.fhooe.swe4.administration.data;
+package at.fhooe.swe4.administration.models;
 
 import at.fhooe.swe4.administration.enums.Category;
 import at.fhooe.swe4.administration.enums.Condition;
 
-public class DemandItem {
+public class Article {
   private Integer id;
+  private String name;
   private String description;
   private Condition condition;
-  private Integer amount;
-  private ReceivingOffice ownerOffice;
   private Category category;
 
-  public DemandItem(Integer id, String description, Condition condition, Integer amount, ReceivingOffice ownerOffice, Category category) {
+  public Article(Integer id, String name, String description, Condition condition, Category category) {
     this.id = id;
+    this.name = name;
     this.description = description;
     this.condition = condition;
-    this.amount = amount;
-    this.ownerOffice = ownerOffice;
     this.category = category;
+  }
+
+  @Override
+  public String toString() {
+    return
+            "AritkelNr: " + id +
+            ", " + name +
+            ", " + condition +
+            ", " + category;
   }
 
   public Integer getId() {
@@ -26,6 +33,14 @@ public class DemandItem {
 
   public void setId(Integer id) {
     this.id = id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
   public String getDescription() {
@@ -42,22 +57,6 @@ public class DemandItem {
 
   public void setCondition(Condition condition) {
     this.condition = condition;
-  }
-
-  public Integer getAmount() {
-    return amount;
-  }
-
-  public void setAmount(Integer amount) {
-    this.amount = amount;
-  }
-
-  public ReceivingOffice getOwnerOffice() {
-    return ownerOffice;
-  }
-
-  public void setOwnerOffice(ReceivingOffice ownerOffice) {
-    this.ownerOffice = ownerOffice;
   }
 
   public Category getCategory() {

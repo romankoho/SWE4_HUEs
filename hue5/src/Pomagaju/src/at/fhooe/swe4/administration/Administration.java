@@ -1,6 +1,6 @@
 package at.fhooe.swe4.administration;
 
-import at.fhooe.swe4.administration.scenes.LoginScene;
+import at.fhooe.swe4.administration.views.LoginScene;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
