@@ -4,10 +4,6 @@ import at.fhooe.swe4.administration.controller.DemandController;
 import at.fhooe.swe4.administration.enums.Category;
 import at.fhooe.swe4.administration.enums.FederalState;
 import at.fhooe.swe4.administration.models.DemandItem;
-import at.fhooe.swe4.donationsApp.controller.DonationsController;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -24,7 +20,13 @@ public class DonationsScene {
 
   private static VBox filteredResults = new VBox();
 
+  private Category categoryFilter = null;
+  private FederalState federalStateFilter = null;
+  private String addressFilter = null;
+  private String textFilter = null;
+
   public DonationsScene(Stage window) {
+    this.window = window;
     mainPane = new VBox(createMainPane());
     mainPane.setId("donations-pane");
     setFilteredResults();
@@ -43,6 +45,7 @@ public class DonationsScene {
     VBox textSearch = new VBox(new Label("Textsuche:"), textSearchField);
 
     ChoiceBox federalStatesDropDown = new ChoiceBox();
+    federalStatesDropDown.getItems().add(null);
     federalStatesDropDown.getItems().addAll(FederalState.values());
     VBox federalStateSearch = new VBox(new Label("Bundesland"), federalStatesDropDown);
     federalStateSearch.setId("filter-vBox");
@@ -52,6 +55,7 @@ public class DonationsScene {
     addressSearch.setId("filter-vBox");
 
     ChoiceBox categoryDropDown = new ChoiceBox();
+    categoryDropDown.getItems().add(null);
     categoryDropDown.getItems().addAll(Category.values());
     VBox categorySearch = new VBox(new Label("Kategorie"), categoryDropDown);
     categorySearch.setId("filter-vBox");
@@ -62,8 +66,45 @@ public class DonationsScene {
     Button deleteFilters = new Button("Filter löschen");
     deleteFilters.setId("standard-button");
 
+
+    FilteredList<DemandItem> filteredDemand = DemandController.getInstance().filteredDemandDonationsApp();
     //TODO die ganzen Eventlistener, dass bei Auswahl/Eingabe gleich gefiltert wird
 
+    textSearchField.textProperty().addListener ((observable, oldValue, newValue)-> {
+      textFilter = newValue;
+      Predicate<DemandItem> textPredicate = demandItem -> textFilter.equals("") || demandItem.getAmount().toString().contains(textFilter) ||
+          demandItem.getRelatedOffice().getAddress().contains(textFilter) || demandItem.getRelatedOffice().getDistrict().contains(textFilter) ||
+              demandItem.getRelatedOffice().getName().contains(textFilter) || demandItem.getRelatedOffice().getFederalState().toString().contains(textFilter) ||
+              demandItem.getRelatedOffice().getStatus().toString().contains(textFilter) || demandItem.getRelatedArticle().getCategory().toString().contains(textFilter) ||
+              demandItem.getRelatedArticle().getCondition().toString().contains(textFilter) || demandItem.getRelatedArticle().getDescription().contains(textFilter) ||
+              demandItem.getRelatedArticle().getName().contains(textFilter);
+
+
+      filteredDemand.setPredicate(textPredicate.and(filteredDemand.getPredicate()));
+      setFilteredResults();
+    });
+
+
+    addressSearchField.textProperty().addListener ((observable, oldValue, newValue)-> {
+      addressFilter = newValue;
+      Predicate<DemandItem> addressPredicate = demandItem -> addressFilter.equals("") || demandItem.getRelatedOffice().getAddress().contains(addressFilter);
+      filteredDemand.setPredicate(addressPredicate.and(filteredDemand.getPredicate()));
+      setFilteredResults();
+    });
+
+    categoryDropDown.setOnAction( e-> {
+      categoryFilter = (Category)categoryDropDown.getValue();
+      Predicate<DemandItem> categoryPredicate = demandItem -> categoryFilter == null || categoryFilter.equals(demandItem.getRelatedArticle().getCategory());
+      filteredDemand.setPredicate(categoryPredicate.and(filteredDemand.getPredicate()));
+      setFilteredResults();
+    });
+
+    federalStatesDropDown.setOnAction( e-> {
+      federalStateFilter = (FederalState) federalStatesDropDown.getValue();
+      Predicate<DemandItem> federalStatePredicate = demandItem -> federalStateFilter == null || federalStateFilter.equals(demandItem.getRelatedOffice().getFederalState());
+      filteredDemand.setPredicate(federalStatePredicate.and(filteredDemand.getPredicate()));
+      setFilteredResults();
+    });
 
     deleteFilters.setOnAction(event -> {
       textSearchField.clear();
@@ -71,8 +112,6 @@ public class DonationsScene {
       addressSearchField.clear();
       categoryDropDown.setValue(null);
 
-      //delete all filters from filtered List
-      DonationsController.getFilteredDonations().setPredicate(x -> true);
     });
 
     VBox filters = new VBox(textSearch, filterSelection, deleteFilters);
@@ -123,7 +162,7 @@ public class DonationsScene {
 
   private void setFilteredResults() {
     filteredResults.getChildren().clear();
-    FilteredList<DemandItem> filteredDemand = DemandController.getInstance().getFilteredDemand();
+    FilteredList<DemandItem> filteredDemand = DemandController.getInstance().filteredDemandDonationsApp();
 
     for(int i = 0; i < filteredDemand.size(); i++) {
       VBox demandTile = demandTile(filteredDemand.get(i));

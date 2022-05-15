@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 
+
 public class DemandController {
   private static DemandController obj;
 
@@ -14,6 +15,7 @@ public class DemandController {
           FXCollections.observableArrayList();
 
   private static FilteredList<DemandItem> filteredDemand = new FilteredList<>(demand);
+  private static FilteredList<DemandItem> filteredDemandDonationsApp = new FilteredList<>(demand, p->true);
 
   private DemandController() {}
 
@@ -36,6 +38,7 @@ public class DemandController {
 
   public ObservableList<DemandItem> getDemandList() {return demand;}
   public FilteredList<DemandItem> getFilteredDemand() {return filteredDemand;}
+  public FilteredList<DemandItem> filteredDemandDonationsApp() {return filteredDemandDonationsApp;}
 
   public boolean demandIsLinkedToReceivingOffice(ReceivingOffice office) {
     for(int i = 0; i < demand.size(); i++) {
