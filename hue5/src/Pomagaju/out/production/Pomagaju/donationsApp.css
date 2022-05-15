@@ -1,0 +1,83 @@
+#my-donations-button{
+    -fx-graphic: url('myDonations-button.png');
+    -fx-background-color: none;
+    -fx-border-width: 0;
+}
+
+#my-donations-button:hover {
+    -fx-graphic: url('myDonations-button_hovered.png');
+    -fx-background-color: none;
+    -fx-border-width: 0;
+}
+
+#myDonations-pane{
+    -fx-alignment: top-right;
+    -fx-padding: 5
+}
+
+#filters-pane {
+    -fx-spacing: 5;
+    -fx-padding: 10;
+}
+
+#filter-tile-pane{
+    -fx-padding: 5;
+    -fx-spacing: 5;
+    -fx-hgap: 20;
+    -fx-vgap: 5;
+}
+
+#standard-button{
+    -fx-min-width: 100;
+}
+
+#demand-tile-vbox{
+    -fx-border-radius: 2;
+    -fx-border-color: #005BBC;
+    -fx-border-width: 2;
+    -fx-padding: 10;
+    -fx-vgap: 5;
+}
+
+#text-search-field{
+    -fx-max-width: 200;
+}
+
+#button-donate {
+    -fx-padding: 5;
+    -fx-min-height: 35;
+    -fx-min-width: 100;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFD600;
+    -fx-background-color: #005BBC;
+    -fx-spacing: 10;
+}
+
+#button-donate:hover{
+    -fx-background-color: #4293EA;
+}
+
+#donation-scene-scroll-area{
+    -fx-padding: 10;
+    -fx-spacing: 10;
+    -fx-max-width: 440;
+}
+
+#donations-grid{
+    -fx-padding: 5;
+    -fx-spacing: 5;
+    -fx-hgap: 20;
+    -fx-vgap: 5;
+}
+
+#demand-tile-vbox{
+    -fx-alignment: center;
+    -fx-min-width: 400;
+    -fx-max-width: 601;
+    -fx-hgap: 100;
+}
+
+#filtered-results-vbox{
+    -fx-spacing: 10;
+    -fx-alignment: center;
+}

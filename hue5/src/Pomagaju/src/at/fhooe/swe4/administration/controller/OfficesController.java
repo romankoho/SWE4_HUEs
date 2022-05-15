@@ -41,7 +41,7 @@ public class OfficesController {
             "Wien", "Porzellangasse", Status.ACTIVE));
   }
 
-  public ObservableList<ReceivingOffice> getArrayList() {return offices;}
+  public ObservableList<ReceivingOffice> getOffices() {return offices;}
 
   public void addOffice(ReceivingOffice o) {offices.add(o);}
   public void deleteOffice(ReceivingOffice o) {offices.remove(o);}

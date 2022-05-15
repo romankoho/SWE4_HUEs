@@ -1,6 +1,8 @@
 package at.fhooe.swe4.administration;
 
 import at.fhooe.swe4.administration.views.ArticleScene;
+import at.fhooe.swe4.administration.views.DemandScene;
+import at.fhooe.swe4.administration.views.OfficesScene;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -21,16 +23,37 @@ public class Utilities {
   }
 
   public static MenuBar createMenuBar(Stage window) {
+    MenuItem manageDemand = new MenuItem("Bedarf verwalten");
     MenuItem manageReceivingOffices = new MenuItem("Annahmestellen verwalten");
     MenuItem manageArticles = new MenuItem("Hilfsgüter verwalten");
     Menu adminMenu = new Menu("Verwaltung");
-    adminMenu.getItems().addAll(manageReceivingOffices, manageArticles);
+    adminMenu.getItems().addAll(manageDemand, manageReceivingOffices, manageArticles);
 
     manageArticles.addEventHandler(ActionEvent.ACTION, (e) -> handleManageArticlesEvent(e, window));
+    manageDemand.addEventHandler(ActionEvent.ACTION, (e) -> handleManageDemandEvent(e, window));
+    manageReceivingOffices.addEventHandler(ActionEvent.ACTION, (e) -> handleManageOfficesEvent(e, window));
 
     MenuBar menuBar = new MenuBar();
     menuBar.getMenus().add(adminMenu);
     return menuBar;
+  }
+
+  private static void handleManageOfficesEvent(ActionEvent e, Stage window) {
+    double x = window.getWidth();
+    double y = window.getHeight();
+    window.setWidth(x);
+    window.setHeight(y);
+    OfficesScene officesScene = new OfficesScene(window);
+    window.setScene(officesScene.getOfficesScene());
+  }
+
+  private static void handleManageDemandEvent(ActionEvent e, Stage window) {
+    double x = window.getWidth();
+    double y = window.getHeight();
+    window.setWidth(x);
+    window.setHeight(y);
+    DemandScene demandScene = new DemandScene(window);
+    window.setScene(demandScene.getMainScene());
   }
 
   private static void handleManageArticlesEvent(ActionEvent e, Stage window) {

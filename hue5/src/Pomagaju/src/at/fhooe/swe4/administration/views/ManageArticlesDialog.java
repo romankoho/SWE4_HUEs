@@ -4,7 +4,6 @@ import at.fhooe.swe4.administration.controller.ArticleController;
 import at.fhooe.swe4.administration.models.Article;
 import at.fhooe.swe4.administration.enums.Category;
 import at.fhooe.swe4.administration.enums.Condition;
-import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -19,34 +18,20 @@ import java.util.Random;
 public class ManageArticlesDialog {
   private Window owner;
   private Stage dialogStage;
-  private TableView<Article> articleTable;
 
   private TextField nameInput;
   private TextArea descriptionInput;
   private ChoiceBox conditionInput;
   private ChoiceBox categoryInput;
 
-  protected ManageArticlesDialog(Window owner, TableView<Article> articleTable) {
+  protected ManageArticlesDialog(Window owner) {
     dialogStage = new Stage();
     this.owner = owner;
-    this.articleTable = articleTable;
-  }
-
-  private ChoiceBox createConditionDropDown() {
-    ChoiceBox conditionDropDown = new ChoiceBox();
-    conditionDropDown.getItems().addAll(Condition.values());
-    return conditionDropDown;
-  }
-
-  private ChoiceBox createCategoryDropDown() {
-    ChoiceBox categoryDropDown = new ChoiceBox();
-    categoryDropDown.getItems().addAll(Category.values());
-    return categoryDropDown;
   }
 
   private GridPane createInputGrid() {
     GridPane inputGrid = new GridPane();
-    inputGrid.setId("add-category-input-grid");
+    inputGrid.setId("article-input-grid");
 
     inputGrid.add(new Label("Name: "),0,0);
     nameInput = new TextField();
@@ -57,11 +42,13 @@ public class ManageArticlesDialog {
     inputGrid.add(descriptionInput,1,1);
 
     inputGrid.add(new Label("Zustand: "),0,2);
-    conditionInput = createConditionDropDown();
+    conditionInput = new ChoiceBox();
+    conditionInput.getItems().addAll(Condition.values());
     inputGrid.add(conditionInput,1,2);
 
     inputGrid.add(new Label("Kategorie: "),0,3);
-    categoryInput = createCategoryDropDown();
+    categoryInput = new ChoiceBox();
+    categoryInput.getItems().addAll(Category.values());
     inputGrid.add(categoryInput,1,3);
 
     return inputGrid;
@@ -97,7 +84,7 @@ public class ManageArticlesDialog {
     });
 
     Scene dialogScene = new Scene(inputGrid);
-    dialogScene.getStylesheets().add(getClass().getResource("/addDemand-dialog.css").toExternalForm());
+    dialogScene.getStylesheets().add(getClass().getResource("/administration.css").toExternalForm());
     sceneSetup(dialogScene, "Hilfsgut hinzufügen");
   }
 
@@ -122,12 +109,13 @@ public class ManageArticlesDialog {
       ArticleController.getInstance().updateArticle(
               selectedItem, descriptionInput.getText(),
               descriptionInput.getText(),(Condition)conditionInput.getValue(),
-              (Category) categoryInput.getValue()); articleTable.refresh();
+              (Category) categoryInput.getValue());
+      ArticleScene.articleTable.refresh();
     });
 
     Scene dialogScene = new Scene(inputGrid);
-    dialogScene.getStylesheets().add(getClass().getResource("/addDemand-dialog.css").toExternalForm());
-    sceneSetup(dialogScene, "Bedarfsmeldung ändern");
+    dialogScene.getStylesheets().add(getClass().getResource("/administration.css").toExternalForm());
+    sceneSetup(dialogScene, "Hilfsgut verwalten");
   }
 
   private void sceneSetup(Scene scene, String stageTitle) {

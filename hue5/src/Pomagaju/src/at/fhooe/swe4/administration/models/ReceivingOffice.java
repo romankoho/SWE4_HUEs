@@ -1,8 +1,10 @@
 package at.fhooe.swe4.administration.models;
 
+import at.fhooe.swe4.administration.controller.DemandController;
 import at.fhooe.swe4.administration.enums.FederalState;
 import at.fhooe.swe4.administration.enums.Status;
 
+import java.util.List;
 import java.util.Objects;
 
 public class ReceivingOffice {
@@ -27,6 +29,19 @@ public class ReceivingOffice {
   public String toString() {
     return "Annahmestelle: " + id + ", "
             + ", "+ name +", " + district + ", " + address;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    ReceivingOffice office = (ReceivingOffice) o;
+    return id.equals(office.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
   }
 
   public Integer getId() {

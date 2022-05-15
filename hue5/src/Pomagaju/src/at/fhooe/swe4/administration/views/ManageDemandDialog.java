@@ -6,7 +6,6 @@ import at.fhooe.swe4.administration.controller.OfficesController;
 import at.fhooe.swe4.administration.models.Article;
 import at.fhooe.swe4.administration.models.DemandItem;
 import at.fhooe.swe4.administration.models.ReceivingOffice;
-import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -21,17 +20,15 @@ import java.util.Random;
 public class ManageDemandDialog {
   private Window owner;
   private Stage dialogStage;
-  private TableView<DemandItem> demandTable;
   private Integer curAmountInt = 1;
 
   private ChoiceBox articleDropDown;
   private ChoiceBox officeDropDown;
   private HBox amountControl;
 
-  protected ManageDemandDialog(Window owner, TableView<DemandItem> demandTable) {
+  protected ManageDemandDialog(Window owner) {
     dialogStage = new Stage();
     this.owner = owner;
-    this.demandTable = demandTable;
   }
 
   private HBox createAmountSelection(Integer startAmount) {
@@ -60,34 +57,13 @@ public class ManageDemandDialog {
     return amountPane;
   }
 
-  private Button createAddButton() {
-    Button addButton = new Button("Bedarf hinzufügen");
-    addButton.setId("button-add-demand");
-    return addButton;
-  }
-
-  private Button createCancelButton() {
-    Button cancelButton = new Button("Abbrechen");
-    cancelButton.setId("button-cancel");
-    cancelButton.setOnAction(e -> {
-      dialogStage.close();
-    });
-    return cancelButton;
-  }
-
-  private Button createSaveButton() {
-    Button saveButton = new Button("Speichern");
-    saveButton.setId(("button-save"));
-    return saveButton;
-  }
-
-  private GridPane createInputGrid(Integer startAmount_amountControl) {
+    private GridPane createInputGrid(Integer startAmount_amountControl) {
     GridPane inputGrid = new GridPane();
     inputGrid.setId("add-demand-input-grid");
 
     inputGrid.add(new Label("Benötigtes Spendengut: "),0,0);
     articleDropDown = new ChoiceBox();
-    articleDropDown.getItems().addAll(ArticleController.getInstance().getArrayList());
+    articleDropDown.getItems().addAll(ArticleController.getInstance().getArticles());
     inputGrid.add(articleDropDown,1,0);
 
     inputGrid.add(new Label("Menge: "),0,1);
@@ -96,7 +72,7 @@ public class ManageDemandDialog {
 
     inputGrid.add(new Label("zuständige Annahmestelle: "),0,2);
     officeDropDown = new ChoiceBox();
-    officeDropDown.getItems().addAll(OfficesController.getInstance().getArrayList());
+    officeDropDown.getItems().addAll(OfficesController.getInstance().getOffices());
     officeDropDown.setValue(OfficesController.getInstance().getActiveOffice());
     inputGrid.add(officeDropDown,1,2);
 
@@ -104,7 +80,8 @@ public class ManageDemandDialog {
   }
 
   private void addDemandDialog() {
-    Button addButton = createAddButton();
+    Button addButton = new Button("Bedarf hinzufügen");
+    addButton.setId("button-add-demand");
 
     HBox buttonBar = new HBox(20);
     buttonBar.setId("button-bar");
@@ -125,10 +102,9 @@ public class ManageDemandDialog {
     });
 
     Scene dialogScene = new Scene(inputGrid);
-    dialogScene.getStylesheets().add(getClass().getResource("/addDemand-dialog.css").toExternalForm());
+    dialogScene.getStylesheets().add(getClass().getResource("/administration.css").toExternalForm());
     sceneSetup(dialogScene, "Bedarfsmeldung hinzufügen");
   }
-
 
   private void editDemandDialog(DemandItem selectedItem){
     Button saveButton = new Button("Speichern");
@@ -153,11 +129,11 @@ public class ManageDemandDialog {
       DemandController.getInstance().getFilteredDemand().setPredicate(
               demandItem -> demandItem.getRelatedOffice().equals(OfficesController.getInstance().getActiveOffice())
       );
-      demandTable.refresh();
+      DemandScene.demandTable.refresh();
     });
 
     Scene dialogScene = new Scene(inputGrid);
-    dialogScene.getStylesheets().add(getClass().getResource("/addDemand-dialog.css").toExternalForm());
+    dialogScene.getStylesheets().add(getClass().getResource("/administration.css").toExternalForm());
     sceneSetup(dialogScene, "Bedarfsmeldung ändern");
   }
 

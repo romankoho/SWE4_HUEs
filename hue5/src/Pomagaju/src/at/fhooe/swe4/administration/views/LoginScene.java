@@ -7,7 +7,6 @@ import at.fhooe.swe4.administration.models.ReceivingOffice;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -25,7 +24,7 @@ public class LoginScene {
     loginPane.setId("login-pane");
 
     loginScene = new Scene(loginPane, 600,600);
-    loginScene.getStylesheets().add(getClass().getResource("/loginScene.css").toString());
+    loginScene.getStylesheets().add(getClass().getResource("/administration.css").toString());
   }
 
   public static Scene getLoginScene() {
@@ -35,35 +34,7 @@ public class LoginScene {
   private static TableView<ReceivingOffice> officeTable;
 
   private static TableView<ReceivingOffice> createOfficeTable() {
-    TableView<ReceivingOffice> officeTable = new TableView<>();
-    officeTable.setId("office-table");
-    officeTable.setItems(OfficesController.getInstance().getArrayList());
-
-    TableColumn<ReceivingOffice, Integer> idCol = new TableColumn<>("ID");
-    TableColumn<ReceivingOffice, String> nameCol = new TableColumn<>("Name");
-    TableColumn<ReceivingOffice, String> stateCol = new TableColumn<>("Bundesland");
-    TableColumn<ReceivingOffice, String> districtCol = new TableColumn<>("Bezirk");
-    TableColumn<ReceivingOffice, String> addCol = new TableColumn<>("Adresse");
-
-    idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-    nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-    stateCol.setCellValueFactory(new PropertyValueFactory<>("federalState"));
-    districtCol.setCellValueFactory(new PropertyValueFactory<>("district"));
-    addCol.setCellValueFactory(new PropertyValueFactory<>("address"));
-
-    idCol.setMinWidth(40);
-    nameCol.setMinWidth(160);
-    stateCol.setMinWidth(40);
-    districtCol.setMinWidth(20);
-    addCol.setMinWidth(60);
-
-    officeTable.getColumns().add(idCol);
-    officeTable.getColumns().add(nameCol);
-    officeTable.getColumns().add(stateCol);
-    officeTable.getColumns().add(districtCol);
-    officeTable.getColumns().add(addCol);
-
-    return officeTable;
+    return OfficesScene.createOfficesTable();
   }
 
   protected static Pane createLoginPane(){
@@ -73,7 +44,6 @@ public class LoginScene {
 
     Button startButton = Utilities.createTextButton("button-login", "Login");
     startButton.addEventHandler(ActionEvent.ACTION, (e) -> handleLoginButtonEvent(e));
-
     officeTable = createOfficeTable();
 
     VBox startPane = new VBox(loginInfo, officeTable, startButton);
@@ -97,8 +67,8 @@ public class LoginScene {
       window.setWidth(x);
       window.setHeight(y);
 
-      MainScene mainScene = new MainScene(window);
-      window.setScene(mainScene.getMainScene());
+      DemandScene demandScene = new DemandScene(window);
+      window.setScene(demandScene.getMainScene());
     }
   }
 }

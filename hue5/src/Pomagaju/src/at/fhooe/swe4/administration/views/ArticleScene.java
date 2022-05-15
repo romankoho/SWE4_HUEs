@@ -3,8 +3,6 @@ package at.fhooe.swe4.administration.views;
 import at.fhooe.swe4.administration.Utilities;
 import at.fhooe.swe4.administration.controller.ArticleController;
 import at.fhooe.swe4.administration.models.Article;
-import at.fhooe.swe4.administration.enums.Category;
-import at.fhooe.swe4.administration.enums.Condition;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -21,24 +19,29 @@ public class ArticleScene {
 
   private static Stage window;
   private final Scene manageArticleScene;
-  private static TableView<Article> articleTable;
+  private static Pane mainPane;
+
+  protected static TableView<Article> articleTable;
 
   public Scene getManageArticleScene() {return this.manageArticleScene;}
 
   public ArticleScene(Stage window) {
     this.window = window;
 
-    Pane mainPane = new VBox(ArticleScene.createScene());
-    mainPane.setId("manageArticles-pane");
+    mainPane = new VBox();
+    mainPane.getChildren().add(Utilities.createMenuBar(window));
+    mainPane.getChildren().add(createMainPane());
+    mainPane.setId("articles-pane");
 
     manageArticleScene = new Scene(mainPane, 600,600);
-    manageArticleScene.getStylesheets().add(LoginScene.class.getResource("/mainScene.css").toString());
+    manageArticleScene.getStylesheets().add(getClass().getResource("/administration.css").toString());
   }
 
   private static TableView<Article> createArticleTable() {
     TableView<Article> articleTable = new TableView<>();
     articleTable.setId("article-table");
-    articleTable.setItems(ArticleController.getInstance().getArrayList());
+    articleTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    articleTable.setItems(ArticleController.getInstance().getArticles());
 
     TableColumn<Article, Integer> idCol = new TableColumn<>("ID");
     TableColumn<Article, String> nameCol = new TableColumn<>("Name");
@@ -67,7 +70,7 @@ public class ArticleScene {
     return articleTable;
   }
 
-  protected static Pane createScene() {
+  protected static Pane createMainPane() {
     Label articlesHL = new Label("Übersicht über Hilfsgüter");
     articlesHL.setId("headline");
     articleTable = createArticleTable();
@@ -86,19 +89,21 @@ public class ArticleScene {
     HBox articleButtonPane = new HBox(addArticle, deleteArticle, editArticle);
     articleButtonPane.setId("article-buttons-pane");
 
-    VBox mainPane = new VBox(Utilities.createMenuBar(window), articlesHL, articleTable, articleButtonPane);
-    return mainPane;
+    VBox articlesPane = new VBox(articlesHL, articleTable, articleButtonPane);
+    articlesPane.setId("articles-pane-content");
+
+    return articlesPane;
   }
 
   private static void handleAddArticleEvent(ActionEvent e) {
-    ManageArticlesDialog dialog = new ManageArticlesDialog(window, articleTable);
+    ManageArticlesDialog dialog = new ManageArticlesDialog(window);
     dialog.showAddDialog();
   }
 
   private static void handleEditArticleEvent(ActionEvent e) {
     Article selectedArticle = articleTable.getSelectionModel().getSelectedItem();
     if (selectedArticle != null) {
-      ManageArticlesDialog dialog = new ManageArticlesDialog(window, articleTable);
+      ManageArticlesDialog dialog = new ManageArticlesDialog(window);
       dialog.showEditDialog(selectedArticle);
     }
   }

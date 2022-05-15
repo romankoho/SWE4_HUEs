@@ -32,7 +32,7 @@ public class ArticleController {
     articles.addAll(temp, temp2, temp3, temp4);
   }
 
-  public ObservableList<Article> getArrayList() {
+  public ObservableList<Article> getArticles() {
     return articles;
   }
 

@@ -26,16 +26,27 @@ public class DemandController {
   }
 
   private void initWithTestData(){
-    demand.add(new DemandItem(1, ArticleController.getInstance().getArrayList().get(0),
-            OfficesController.getInstance().getArrayList().get(0), 3));
-    demand.add(new DemandItem(2, ArticleController.getInstance().getArrayList().get(1),
-            OfficesController.getInstance().getArrayList().get(0), 12));
-    demand.add(new DemandItem(3, ArticleController.getInstance().getArrayList().get(2),
-            OfficesController.getInstance().getArrayList().get(1), 4));
+    demand.add(new DemandItem(1, ArticleController.getInstance().getArticles().get(0),
+            OfficesController.getInstance().getOffices().get(0), 3));
+    demand.add(new DemandItem(2, ArticleController.getInstance().getArticles().get(1),
+            OfficesController.getInstance().getOffices().get(0), 12));
+    demand.add(new DemandItem(3, ArticleController.getInstance().getArticles().get(2),
+            OfficesController.getInstance().getOffices().get(1), 4));
   }
 
-  public ObservableList<DemandItem> getArrayList() {return demand;}
+  public ObservableList<DemandItem> getDemandList() {return demand;}
   public FilteredList<DemandItem> getFilteredDemand() {return filteredDemand;}
+
+  public boolean demandIsLinkedToReceivingOffice(ReceivingOffice office) {
+    for(int i = 0; i < demand.size(); i++) {
+      DemandItem d = demand.get(i);
+      ReceivingOffice currentOffice = d.getRelatedOffice();
+      if(currentOffice.equals(office)) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   public void addDemand(DemandItem d) {demand.add(d);}
   public void deleteDemand(DemandItem d) {demand.remove(d);}

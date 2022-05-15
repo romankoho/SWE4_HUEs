@@ -1,12 +1,9 @@
 package at.fhooe.swe4.administration.views;
 
-import at.fhooe.swe4.administration.controller.ArticleController;
 import at.fhooe.swe4.administration.controller.DemandController;
 import at.fhooe.swe4.administration.controller.OfficesController;
-import at.fhooe.swe4.administration.models.ReceivingOffice;
 import at.fhooe.swe4.administration.models.DemandItem;
 import at.fhooe.swe4.administration.Utilities;
-import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -16,23 +13,24 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.util.function.Predicate;
-
-public class MainScene {
+public class DemandScene {
 
   private static Stage window;
   private final Scene mainScene;
+  private static Pane mainPane;
 
-  private static TableView<DemandItem> demandTable;
+  protected static TableView<DemandItem> demandTable;
 
-  public MainScene(Stage window) {
+  public DemandScene(Stage window) {
     this.window = window;
 
-    Pane mainPane = new VBox(MainScene.createMainPane());
-    mainPane.setId("main-pane");
+    mainPane = new VBox();
+    mainPane.getChildren().add(Utilities.createMenuBar(window));
+    mainPane.getChildren().add(createMainPane());
+    mainPane.setId("demand-pane");
 
     mainScene = new Scene(mainPane, 600,600);
-    mainScene.getStylesheets().add(LoginScene.class.getResource("/mainScene.css").toString());
+    mainScene.getStylesheets().add(getClass().getResource("/administration.css").toString());
   }
 
   public Scene getMainScene() {
@@ -43,6 +41,7 @@ public class MainScene {
     TableView<DemandItem> demandTable = new TableView<>();
     demandTable.setId("demand-table");
     demandTable.setItems(DemandController.getInstance().getFilteredDemand());
+    demandTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
     TableColumn<DemandItem, Integer> idCol = new TableColumn<>("ID");
     TableColumn<DemandItem, String> articleCol = new TableColumn<>("Hilfsgut");
@@ -54,7 +53,7 @@ public class MainScene {
 
     idCol.setMinWidth(40);
     amountCol.setMinWidth(20);
-    articleCol.setMinWidth(300);
+    articleCol.setMinWidth(400);
 
     demandTable.getColumns().add(idCol);
     demandTable.getColumns().add(amountCol);
@@ -85,14 +84,10 @@ public class MainScene {
     VBox topBox = new VBox(activeOfficeControlBox, demandHL);
     topBox.setId("topBox");
 
-    ReceivingOffice activeOfficeDEBUG = OfficesController.getInstance().getActiveOffice();
-
     demandTable = createDemandTable();
     DemandController.getInstance().getFilteredDemand().setPredicate(
             demandItem -> demandItem.getRelatedOffice().equals(OfficesController.getInstance().getActiveOffice())
     );
-
-    FilteredList<DemandItem> fL = DemandController.getInstance().getFilteredDemand();
 
     Button addDemand = Utilities.createTextButton("add-demand", "+");
     addDemand.setId("standard-button");
@@ -111,8 +106,9 @@ public class MainScene {
     Label donationNoticeHL = new Label("Spendenankündigungen");
     donationNoticeHL.setId("headline");
 
-    VBox mainPane = new VBox(Utilities.createMenuBar(window), topBox, demandTable, demandButtonsPane);      //da gehören die anderen Bestandteile noch rein
-    return mainPane;
+    VBox demandPane = new VBox(topBox, demandTable, demandButtonsPane);
+    demandPane.setId("demand-pane-content");
+    return demandPane;
   }
 
   private static void handleChangeActiveOfficeEvent(Object e) {
@@ -133,14 +129,14 @@ public class MainScene {
   }
 
   private static void handleAddDemandEvent(ActionEvent e) {
-    ManageDemandDialog dialog = new ManageDemandDialog(window, demandTable);
+    ManageDemandDialog dialog = new ManageDemandDialog(window);
     dialog.showAddDialog();
   }
 
   private static void handleEditDemandEvent(ActionEvent e) {
     DemandItem demandI = demandTable.getSelectionModel().getSelectedItem();
     if (demandI != null) {
-      ManageDemandDialog dialog = new ManageDemandDialog(window, demandTable);
+      ManageDemandDialog dialog = new ManageDemandDialog(window);
       dialog.showEditDialog(demandI);
     }
   }
