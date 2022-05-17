@@ -1,15 +1,19 @@
-package at.fhooe.swe4.administration;
+package at.fhooe.swe4;
 
 import at.fhooe.swe4.administration.views.ArticleScene;
 import at.fhooe.swe4.administration.views.DemandScene;
 import at.fhooe.swe4.administration.views.OfficesScene;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.stage.Window;
 
 public class Utilities {
 
@@ -65,6 +69,16 @@ public class Utilities {
 
     ArticleScene articleScene = new ArticleScene(window);
     window.setScene(articleScene.getManageArticleScene());
+  }
+
+  public static void sceneSetup(Window owner, Stage stage, Scene scene, String stageTitle) {
+    stage.setScene(scene);
+    stage.setTitle(stageTitle);
+    stage.setMinWidth(300);
+    stage.setMinHeight(300);
+    stage.initModality(Modality.WINDOW_MODAL);
+    stage.initStyle(StageStyle.UTILITY);
+    stage.initOwner(owner);
   }
 
 }

@@ -1,5 +1,6 @@
 package at.fhooe.swe4.administration.views;
 
+import at.fhooe.swe4.Utilities;
 import at.fhooe.swe4.administration.controller.OfficesController;
 import at.fhooe.swe4.administration.enums.FederalState;
 import at.fhooe.swe4.administration.enums.Status;
@@ -95,7 +96,7 @@ public class ManageOfficesDialog {
 
     Scene dialogScene = new Scene(inputGrid);
     dialogScene.getStylesheets().add(getClass().getResource("/administration.css").toExternalForm());
-    sceneSetup(dialogScene, "Annahmestelle hinzufügen");
+    Utilities.sceneSetup(owner, dialogStage, dialogScene, "Annahmestelle hinzufügen");
   }
 
   private void editDemandDialog(ReceivingOffice selectedItem){
@@ -126,17 +127,7 @@ public class ManageOfficesDialog {
 
     Scene dialogScene = new Scene(inputGrid);
     dialogScene.getStylesheets().add(getClass().getResource("/administration.css").toExternalForm());
-    sceneSetup(dialogScene, "Annahmestelle verwalten");
-  }
-
-  private void sceneSetup(Scene scene, String stageTitle) {
-    dialogStage.setScene(scene);
-    dialogStage.setTitle(stageTitle);
-    dialogStage.setMinWidth(300);
-    dialogStage.setMinHeight(300);
-    dialogStage.initModality(Modality.WINDOW_MODAL);
-    dialogStage.initStyle(StageStyle.UTILITY);
-    dialogStage.initOwner(owner);
+    Utilities.sceneSetup(owner, dialogStage, dialogScene, "Annahmestelle verwalten");
   }
 
   public void showAddDialog() {

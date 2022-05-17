@@ -1,5 +1,6 @@
 package at.fhooe.swe4.donationsApp.controller;
 
+import at.fhooe.swe4.administration.controller.DemandController;
 import at.fhooe.swe4.donationsApp.models.Donation;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,7 +11,6 @@ public class DonationsController {
 
   private static final ObservableList<Donation> donations =
           FXCollections.observableArrayList();
-
 
   public DonationsController() {
   }

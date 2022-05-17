@@ -1,6 +1,6 @@
 package at.fhooe.swe4.administration.views;
 
-import at.fhooe.swe4.administration.Utilities;
+import at.fhooe.swe4.Utilities;
 import at.fhooe.swe4.administration.controller.DemandController;
 import at.fhooe.swe4.administration.controller.OfficesController;
 import at.fhooe.swe4.administration.models.ReceivingOffice;

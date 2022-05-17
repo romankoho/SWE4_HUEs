@@ -3,7 +3,7 @@ package at.fhooe.swe4.administration.views;
 import at.fhooe.swe4.administration.controller.DemandController;
 import at.fhooe.swe4.administration.controller.OfficesController;
 import at.fhooe.swe4.administration.models.DemandItem;
-import at.fhooe.swe4.administration.Utilities;
+import at.fhooe.swe4.Utilities;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;

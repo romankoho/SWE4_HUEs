@@ -1,6 +1,7 @@
 package at.fhooe.swe4.donationsApp;
 
 import at.fhooe.swe4.donationsApp.views.DonationsScene;
+import at.fhooe.swe4.donationsApp.views.LoginSceneDonations;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -11,9 +12,9 @@ public class DonationsApp extends Application {
   public void start(Stage primaryStage) throws Exception {
     window = primaryStage;
 
-    DonationsScene donationsScene = new DonationsScene(window);
+    LoginSceneDonations LoginSceneDonations = new LoginSceneDonations(window);
+    window.setScene(LoginSceneDonations.getLoginScene());
 
-    window.setScene(donationsScene.getDonationScene());
     window.setMinWidth(200);
     window.setMinHeight(450);
     window.setWidth(470);

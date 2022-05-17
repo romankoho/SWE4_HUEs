@@ -21,6 +21,11 @@ public class DemandItem {
     this.amount = amount;
   }
 
+  @Override
+  public String toString() {
+    return  id + ", " + relatedArticle + ", " + relatedOffice + ", " + amount;
+  }
+
   public Article getRelatedArticle() {
     return relatedArticle;
   }

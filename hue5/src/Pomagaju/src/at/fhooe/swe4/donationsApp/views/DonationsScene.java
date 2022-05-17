@@ -4,6 +4,7 @@ import at.fhooe.swe4.administration.controller.DemandController;
 import at.fhooe.swe4.administration.enums.Category;
 import at.fhooe.swe4.administration.enums.FederalState;
 import at.fhooe.swe4.administration.models.DemandItem;
+import at.fhooe.swe4.donationsApp.controller.UserController;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -66,42 +67,39 @@ public class DonationsScene {
     Button deleteFilters = new Button("Filter löschen");
     deleteFilters.setId("standard-button");
 
-
     FilteredList<DemandItem> filteredDemand = DemandController.getInstance().filteredDemandDonationsApp();
-    //TODO die ganzen Eventlistener, dass bei Auswahl/Eingabe gleich gefiltert wird
-
     textSearchField.textProperty().addListener ((observable, oldValue, newValue)-> {
-      textFilter = newValue;
-      Predicate<DemandItem> textPredicate = demandItem -> textFilter.equals("") || demandItem.getAmount().toString().contains(textFilter) ||
-          demandItem.getRelatedOffice().getAddress().contains(textFilter) || demandItem.getRelatedOffice().getDistrict().contains(textFilter) ||
-              demandItem.getRelatedOffice().getName().contains(textFilter) || demandItem.getRelatedOffice().getFederalState().toString().contains(textFilter) ||
-              demandItem.getRelatedOffice().getStatus().toString().contains(textFilter) || demandItem.getRelatedArticle().getCategory().toString().contains(textFilter) ||
-              demandItem.getRelatedArticle().getCondition().toString().contains(textFilter) || demandItem.getRelatedArticle().getDescription().contains(textFilter) ||
-              demandItem.getRelatedArticle().getName().contains(textFilter);
-
+      textFilter = newValue.toLowerCase();
+      Predicate<DemandItem> textPredicate = demandItem -> textFilter.equals("")
+              || demandItem.toString().toLowerCase().contains(textFilter)
+              || demandItem.getRelatedArticle().getDescription().toLowerCase().contains(textFilter);
 
       filteredDemand.setPredicate(textPredicate.and(filteredDemand.getPredicate()));
       setFilteredResults();
     });
 
-
     addressSearchField.textProperty().addListener ((observable, oldValue, newValue)-> {
-      addressFilter = newValue;
-      Predicate<DemandItem> addressPredicate = demandItem -> addressFilter.equals("") || demandItem.getRelatedOffice().getAddress().contains(addressFilter);
+      addressFilter = newValue.toLowerCase();
+      Predicate<DemandItem> addressPredicate = demandItem -> addressFilter.equals("")
+              || demandItem.getRelatedOffice().getAddress().toLowerCase().contains(addressFilter)
+              || demandItem.getRelatedOffice().getDistrict().toLowerCase().contains(addressFilter);
+
       filteredDemand.setPredicate(addressPredicate.and(filteredDemand.getPredicate()));
       setFilteredResults();
     });
 
     categoryDropDown.setOnAction( e-> {
       categoryFilter = (Category)categoryDropDown.getValue();
-      Predicate<DemandItem> categoryPredicate = demandItem -> categoryFilter == null || categoryFilter.equals(demandItem.getRelatedArticle().getCategory());
+      Predicate<DemandItem> categoryPredicate = demandItem -> categoryFilter == null
+              || categoryFilter.equals(demandItem.getRelatedArticle().getCategory());
       filteredDemand.setPredicate(categoryPredicate.and(filteredDemand.getPredicate()));
       setFilteredResults();
     });
 
     federalStatesDropDown.setOnAction( e-> {
       federalStateFilter = (FederalState) federalStatesDropDown.getValue();
-      Predicate<DemandItem> federalStatePredicate = demandItem -> federalStateFilter == null || federalStateFilter.equals(demandItem.getRelatedOffice().getFederalState());
+      Predicate<DemandItem> federalStatePredicate = demandItem -> federalStateFilter == null
+              || federalStateFilter.equals(demandItem.getRelatedOffice().getFederalState());
       filteredDemand.setPredicate(federalStatePredicate.and(filteredDemand.getPredicate()));
       setFilteredResults();
     });
@@ -171,9 +169,11 @@ public class DonationsScene {
   }
 
   private Pane createMainPane() {
+    Label curUser = new Label("Benutzer: " + UserController.getInstance().getCurrentUser().getName());
+
     Button myDonationsButton = new Button();
     myDonationsButton.setId("my-donations-button");
-    HBox myDonations = new HBox(myDonationsButton);
+    HBox myDonations = new HBox(curUser, myDonationsButton);
     myDonations.setId("myDonations-pane");
 
     Pane filters = createFilterPane();

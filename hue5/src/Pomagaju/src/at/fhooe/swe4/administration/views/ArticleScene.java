@@ -1,6 +1,6 @@
 package at.fhooe.swe4.administration.views;
 
-import at.fhooe.swe4.administration.Utilities;
+import at.fhooe.swe4.Utilities;
 import at.fhooe.swe4.administration.controller.ArticleController;
 import at.fhooe.swe4.administration.models.Article;
 import javafx.event.ActionEvent;

@@ -1,5 +1,6 @@
 package at.fhooe.swe4.administration.views;
 
+import at.fhooe.swe4.Utilities;
 import at.fhooe.swe4.administration.controller.ArticleController;
 import at.fhooe.swe4.administration.models.Article;
 import at.fhooe.swe4.administration.enums.Category;
@@ -85,7 +86,7 @@ public class ManageArticlesDialog {
 
     Scene dialogScene = new Scene(inputGrid);
     dialogScene.getStylesheets().add(getClass().getResource("/administration.css").toExternalForm());
-    sceneSetup(dialogScene, "Hilfsgut hinzufügen");
+    Utilities.sceneSetup(owner, dialogStage, dialogScene, "Hilfsgut hinzufügen");
   }
 
   private void editDemandDialog(Article selectedItem){
@@ -115,17 +116,7 @@ public class ManageArticlesDialog {
 
     Scene dialogScene = new Scene(inputGrid);
     dialogScene.getStylesheets().add(getClass().getResource("/administration.css").toExternalForm());
-    sceneSetup(dialogScene, "Hilfsgut verwalten");
-  }
-
-  private void sceneSetup(Scene scene, String stageTitle) {
-    dialogStage.setScene(scene);
-    dialogStage.setTitle(stageTitle);
-    dialogStage.setMinWidth(300);
-    dialogStage.setMinHeight(300);
-    dialogStage.initModality(Modality.WINDOW_MODAL);
-    dialogStage.initStyle(StageStyle.UTILITY);
-    dialogStage.initOwner(owner);
+    Utilities.sceneSetup(owner, dialogStage, dialogScene, "Hilfsgut verwalten");
   }
 
   public void showAddDialog() {

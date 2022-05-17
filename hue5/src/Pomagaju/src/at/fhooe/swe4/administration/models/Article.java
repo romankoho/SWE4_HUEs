@@ -21,10 +21,7 @@ public class Article {
   @Override
   public String toString() {
     return
-            "AritkelNr: " + id +
-            ", " + name +
-            ", " + condition +
-            ", " + category;
+            "AritkelNr: " + id + ", " + name +  ", " + condition + ", " + category;
   }
 
   public Integer getId() {

@@ -43,7 +43,7 @@
     -fx-max-width: 200;
 }
 
-#button-donate {
+#button-donate, #register-button, #login-button {
     -fx-padding: 5;
     -fx-min-height: 35;
     -fx-min-width: 100;
@@ -53,7 +53,7 @@
     -fx-spacing: 10;
 }
 
-#button-donate:hover{
+#button-donate:hover, #register-button:hover, #login-button:hover{
     -fx-background-color: #4293EA;
 }
 
@@ -81,3 +81,23 @@
     -fx-spacing: 10;
     -fx-alignment: center;
 }
+
+#register-label, #login-label{
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+#login-VBox, #register-VBox{
+    -fx-alignment: center;
+    -fx-padding: 20;
+    -fx-spacing: 10;
+}
+
+#registerBox-dialog, #loginBox-dialog {
+    -fx-vgap: 15;
+    -fx-padding: 10;
+    -fx-hgap: 15;
+    -fx-spacing: 20;
+}
+
+

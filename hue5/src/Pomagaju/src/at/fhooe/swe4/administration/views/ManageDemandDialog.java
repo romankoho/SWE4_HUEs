@@ -1,5 +1,6 @@
 package at.fhooe.swe4.administration.views;
 
+import at.fhooe.swe4.Utilities;
 import at.fhooe.swe4.administration.controller.ArticleController;
 import at.fhooe.swe4.administration.controller.DemandController;
 import at.fhooe.swe4.administration.controller.OfficesController;
@@ -103,7 +104,7 @@ public class ManageDemandDialog {
 
     Scene dialogScene = new Scene(inputGrid);
     dialogScene.getStylesheets().add(getClass().getResource("/administration.css").toExternalForm());
-    sceneSetup(dialogScene, "Bedarfsmeldung hinzufügen");
+    Utilities.sceneSetup(owner, dialogStage, dialogScene, "Bedarfsmeldung hinzufügen");
   }
 
   private void editDemandDialog(DemandItem selectedItem){
@@ -134,17 +135,7 @@ public class ManageDemandDialog {
 
     Scene dialogScene = new Scene(inputGrid);
     dialogScene.getStylesheets().add(getClass().getResource("/administration.css").toExternalForm());
-    sceneSetup(dialogScene, "Bedarfsmeldung ändern");
-  }
-
-  private void sceneSetup(Scene scene, String stageTitle) {
-    dialogStage.setScene(scene);
-    dialogStage.setTitle(stageTitle);
-    dialogStage.setMinWidth(300);
-    dialogStage.setMinHeight(300);
-    dialogStage.initModality(Modality.WINDOW_MODAL);
-    dialogStage.initStyle(StageStyle.UTILITY);
-    dialogStage.initOwner(owner);
+    Utilities.sceneSetup(owner, dialogStage, dialogScene, "Bedarfsmeldung ändern");
   }
 
   public void showAddDialog() {
