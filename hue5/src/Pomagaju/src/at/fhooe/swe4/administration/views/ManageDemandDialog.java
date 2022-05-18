@@ -1,12 +1,9 @@
 package at.fhooe.swe4.administration.views;
 
 import at.fhooe.swe4.Utilities;
-import at.fhooe.swe4.administration.controller.ArticleController;
-import at.fhooe.swe4.administration.controller.DemandController;
-import at.fhooe.swe4.administration.controller.OfficesController;
-import at.fhooe.swe4.administration.models.Article;
-import at.fhooe.swe4.administration.models.DemandItem;
-import at.fhooe.swe4.administration.models.ReceivingOffice;
+import at.fhooe.swe4.administration.controller.ManageDemandDialogController;
+import at.fhooe.swe4.model.DemandItem;
+import at.fhooe.swe4.model.dbMock;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -14,17 +11,27 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-import java.util.Random;
-
 public class ManageDemandDialog {
   private Window owner;
   private Stage dialogStage;
-  private Integer curAmountInt = 1;
+
+  private ManageDemandDialogController dialogController;
 
   private ChoiceBox articleDropDown;
   private ChoiceBox officeDropDown;
-  private HBox amountControl;
+  private TextField inputAmount;
   private TableView<DemandItem> demandTable;
+
+  private Button addDemandBtn = new Button("Bedarf hinzufügen");;
+  private Button editDemandBtn = new Button("Speichern");
+
+  public Button getAddDemandBtn() {return addDemandBtn;}
+  public ChoiceBox getArticleDropDown() {return articleDropDown;}
+  public TextField getInputAmount() {return inputAmount;}
+  public ChoiceBox getOfficeDropDown() {return officeDropDown;}
+  public Button getEditDemandBtn() {return editDemandBtn;}
+
+  public TableView<DemandItem> getDemandTable() {return demandTable;}
 
   public ManageDemandDialog(Window owner, TableView<DemandItem> demandTable) {
     dialogStage = new Stage();
@@ -32,110 +39,63 @@ public class ManageDemandDialog {
     this.demandTable = demandTable;
   }
 
-  private HBox createAmountSelection(Integer startAmount) {
-    String startAmountString = startAmount.toString();
-    Label curAmount = new Label(startAmountString);
-
-    Button increaseBtn = new Button("mehr");
-    increaseBtn.setOnAction((e) -> {
-      curAmountInt += 1;
-      String temp = curAmountInt.toString();
-      curAmount.setText(temp);
-    });
-
-    Button decreaseBtn = new Button("weniger");
-    decreaseBtn.setOnAction(e -> {
-      if(curAmountInt > 1) {
-        curAmountInt--;
-        String temp = curAmountInt.toString();
-        curAmount.setText(temp);
-      }
-    });
-
-    HBox amountPane = new HBox(curAmount, increaseBtn, decreaseBtn);
-    amountPane.setId("demand-amount-selection-pane");
-
-    return amountPane;
-  }
-
-    private GridPane createInputGrid(Integer startAmount_amountControl) {
+    private GridPane createInputGrid() {
     GridPane inputGrid = new GridPane();
     inputGrid.setId("add-demand-input-grid");
 
     inputGrid.add(new Label("Benötigtes Spendengut: "),0,0);
     articleDropDown = new ChoiceBox();
-    articleDropDown.getItems().addAll(ArticleController.getInstance().getArticles());
+    articleDropDown.getItems().addAll(dbMock.getInstance().getArticles());
     inputGrid.add(articleDropDown,1,0);
 
     inputGrid.add(new Label("Menge: "),0,1);
-    amountControl = createAmountSelection(startAmount_amountControl);
-    inputGrid.add(amountControl, 1,1);
+    inputAmount = new TextField();
+    inputAmount.setId("manage-demand-input-amount");
+    inputGrid.add(inputAmount, 1,1);
 
     inputGrid.add(new Label("zuständige Annahmestelle: "),0,2);
     officeDropDown = new ChoiceBox();
-    officeDropDown.getItems().addAll(OfficesController.getInstance().getOffices());
-    officeDropDown.setValue(OfficesController.getInstance().getActiveOffice());
+    officeDropDown.getItems().addAll(dbMock.getInstance().getOffices());
+    officeDropDown.setValue(dbMock.getInstance().getActiveOffice());
     inputGrid.add(officeDropDown,1,2);
 
     return inputGrid;
   }
 
   private void addDemandDialog() {
-    Button addButton = new Button("Bedarf hinzufügen");
-    addButton.setId("button-add-demand");
+    addDemandBtn.setId("button-add-demand");
 
     HBox buttonBar = new HBox(20);
     buttonBar.setId("button-bar");
-    buttonBar.getChildren().add(addButton);
+    buttonBar.getChildren().add(addDemandBtn);
 
-    GridPane inputGrid = createInputGrid(1);
+    GridPane inputGrid = createInputGrid();
     inputGrid.add(buttonBar,0,4,3,1);
-
-    addButton.setOnAction(e-> {
-      Article article = (Article)articleDropDown.getValue();
-      ReceivingOffice office = (ReceivingOffice)officeDropDown.getValue();
-
-      if(article != null && curAmountInt > 0) {
-        Random rand = new Random();
-        Integer id = rand.nextInt(10000);
-        DemandController.getInstance().addDemand(new DemandItem(id, article, office, curAmountInt));
-      }
-    });
 
     Scene dialogScene = new Scene(inputGrid);
     dialogScene.getStylesheets().add(getClass().getResource("/administration.css").toExternalForm());
     Utilities.sceneSetup(owner, dialogStage, dialogScene, "Bedarfsmeldung hinzufügen");
+    dialogController = new ManageDemandDialogController(this);
   }
 
   private void editDemandDialog(DemandItem selectedItem){
-    Button saveButton = new Button("Speichern");
-    saveButton.setId(("button-save"));
+    editDemandBtn.setId(("button-save"));
 
     HBox buttonBar = new HBox(20);
     buttonBar.setId("button-bar");
-    buttonBar.getChildren().add(saveButton);
+    buttonBar.getChildren().add(editDemandBtn);
 
-    GridPane inputGrid = createInputGrid(selectedItem.getAmount());
-
+    GridPane inputGrid = createInputGrid();
     inputGrid.add(buttonBar,0,4,3,1);
 
     articleDropDown.setValue(selectedItem.getRelatedArticle());
-    curAmountInt = selectedItem.getAmount() ;
+    inputAmount.setText(selectedItem.getAmount().toString());
     officeDropDown.setValue(selectedItem.getRelatedOffice());
-
-    saveButton.setOnAction(e -> {
-      selectedItem.setRelatedArticle((Article) articleDropDown.getValue());
-      selectedItem.setAmount(curAmountInt);
-      selectedItem.setRelatedOffice((ReceivingOffice)officeDropDown.getValue());
-      DemandController.getInstance().getFilteredDemand().setPredicate(
-              demandItem -> demandItem.getRelatedOffice().equals(OfficesController.getInstance().getActiveOffice())
-      );
-      demandTable.refresh();
-    });
 
     Scene dialogScene = new Scene(inputGrid);
     dialogScene.getStylesheets().add(getClass().getResource("/administration.css").toExternalForm());
     Utilities.sceneSetup(owner, dialogStage, dialogScene, "Bedarfsmeldung ändern");
+    dialogController = new ManageDemandDialogController(this);
   }
 
   public void showAddDialog() {

@@ -1,4 +1,4 @@
-package at.fhooe.swe4.donationsApp.models;
+package at.fhooe.swe4.model;
 
 import java.util.Objects;
 

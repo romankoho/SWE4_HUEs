@@ -1,12 +1,9 @@
 package at.fhooe.swe4.donationsApp.views;
 
 import at.fhooe.swe4.Utilities;
-import at.fhooe.swe4.administration.controller.DemandController;
-import at.fhooe.swe4.administration.models.DemandItem;
-import at.fhooe.swe4.donationsApp.controller.DonationsController;
-import at.fhooe.swe4.donationsApp.controller.UserController;
-import at.fhooe.swe4.donationsApp.models.Donation;
-import at.fhooe.swe4.donationsApp.models.User;
+import at.fhooe.swe4.model.DemandItem;
+import at.fhooe.swe4.model.Donation;
+import at.fhooe.swe4.model.dbMock;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -87,16 +84,16 @@ public class MakeDonationDialog {
 
         //if full demand is covered remove demand item from demand list
         if(demandItem.getAmount() - intAmount == 0) {
-          DemandController.getInstance().deleteDemand(demandItem);
+          dbMock.getInstance().deleteDemand(demandItem);
         } else { //if not full demand is covered just reduce needed amount
-          DemandController.getInstance().reduceDemand(demandItem, intAmount);
+          dbMock.getInstance().reduceDemand(demandItem, intAmount);
         }
 
-        DonationsController.getInstance().addDonation(new Donation(demandItem, datePicker.getValue(),
-                UserController.getInstance().getCurrentUser(), intAmount));
+        dbMock.getInstance().addDonation(new Donation(demandItem, datePicker.getValue(),
+                dbMock.getInstance().getCurrentUser(), intAmount));
 
         //update displayed list of owner window
-        ownerScene.setFilteredResults();
+        ownerScene.updateResults();
         showToken();
 
       } else {

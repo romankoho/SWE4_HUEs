@@ -1,6 +1,4 @@
-package at.fhooe.swe4.donationsApp.models;
-
-import at.fhooe.swe4.administration.models.DemandItem;
+package at.fhooe.swe4.model;
 
 import java.time.LocalDate;
 

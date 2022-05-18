@@ -1,5 +1,6 @@
 package at.fhooe.swe4.donationsApp.views;
 
+import at.fhooe.swe4.donationsApp.controller.LoginSceneDonationsController;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,6 +15,23 @@ public class LoginSceneDonations {
     private Stage window;
     private Scene loginSceneDonations;
 
+    private Button registerBtn;
+    private Button loginBtn;
+
+    public Stage getWindow() {
+        return window;
+    }
+
+    public Button getRegisterBtn() {
+        return registerBtn;
+    }
+
+    public Button getLoginBtn() {
+        return loginBtn;
+    }
+
+    private LoginSceneDonationsController controller;
+
     public LoginSceneDonations(Stage window) {
         this.window = window;
 
@@ -22,6 +40,7 @@ public class LoginSceneDonations {
 
         loginSceneDonations = new Scene(loginPane,  270,550);
         loginSceneDonations.getStylesheets().add(getClass().getResource("/donationsApp.css").toString());
+        controller = new LoginSceneDonationsController(this);
     }
 
     public Scene getLoginScene() {
@@ -31,26 +50,16 @@ public class LoginSceneDonations {
     private Pane createLoginPane() {
         Label registerLabel = new Label("Registriere dich jetzt");
         registerLabel.setId("register-label");
-        Button registerBtn = new Button("Registrieren");
+        registerBtn = new Button("Registrieren");
         registerBtn.setId("register-button");
-
-        registerBtn.addEventHandler(ActionEvent.ACTION, (actionEvent -> {
-            RegisterDialog diag = new RegisterDialog(window);
-            diag.showRegisterDialog();
-        }));
 
         VBox register = new VBox(registerLabel, registerBtn);
         register.setId("register-VBox");
 
         Label loginLabel = new Label("Du hast schon einen Account?");
         loginLabel.setId("login-label");
-        Button loginBtn = new Button("Anmelden");
+        loginBtn = new Button("Anmelden");
         loginBtn.setId("login-button");
-
-        loginBtn.addEventHandler(ActionEvent.ACTION, (actionEvent -> {
-            LoginDialog diag = new LoginDialog(window);
-            diag.showLoginDialog();
-        }));
 
         VBox login = new VBox(loginLabel, loginBtn);
         login.setId("login-VBox");

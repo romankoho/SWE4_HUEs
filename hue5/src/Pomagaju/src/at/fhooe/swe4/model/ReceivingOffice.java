@@ -1,10 +1,8 @@
-package at.fhooe.swe4.administration.models;
+package at.fhooe.swe4.model;
 
-import at.fhooe.swe4.administration.controller.DemandController;
-import at.fhooe.swe4.administration.enums.FederalState;
-import at.fhooe.swe4.administration.enums.Status;
+import at.fhooe.swe4.model.enums.FederalState;
+import at.fhooe.swe4.model.enums.Status;
 
-import java.util.List;
 import java.util.Objects;
 
 public class ReceivingOffice {

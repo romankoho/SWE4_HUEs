@@ -1,7 +1,7 @@
-package at.fhooe.swe4.administration.models;
+package at.fhooe.swe4.model;
 
-import at.fhooe.swe4.administration.enums.Category;
-import at.fhooe.swe4.administration.enums.Condition;
+import at.fhooe.swe4.model.enums.Category;
+import at.fhooe.swe4.model.enums.Condition;
 
 public class Article {
   private Integer id;

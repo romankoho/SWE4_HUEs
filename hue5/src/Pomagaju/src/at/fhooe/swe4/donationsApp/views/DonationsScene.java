@@ -1,18 +1,19 @@
 package at.fhooe.swe4.donationsApp.views;
 
-import at.fhooe.swe4.administration.controller.DemandController;
-import at.fhooe.swe4.administration.enums.Category;
-import at.fhooe.swe4.administration.enums.FederalState;
-import at.fhooe.swe4.administration.models.DemandItem;
-import at.fhooe.swe4.donationsApp.controller.UserController;
+import at.fhooe.swe4.donationsApp.controller.DonationSceneController;
+import at.fhooe.swe4.model.enums.Category;
+import at.fhooe.swe4.model.enums.FederalState;
+import at.fhooe.swe4.model.DemandItem;
+import at.fhooe.swe4.model.dbMock;
 import javafx.collections.transformation.FilteredList;
-import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-import java.util.function.Predicate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class DonationsScene {
 
@@ -20,43 +21,86 @@ public class DonationsScene {
   private final Scene donationScene;
   private Pane mainPane;
 
+  private DonationSceneController controller;
+
+  private FilteredList<DemandItem> filteredDemand = new FilteredList<>(dbMock.getInstance().getDemandItems());
   private  VBox filteredResults = new VBox();
 
-  private Category categoryFilter = null;
-  private FederalState federalStateFilter = null;
-  private String addressFilter = null;
-  private String textFilter = null;
+  private TextField textSearchField;
+  private ChoiceBox federalStatesDropDown;
+  private TextField addressSearchField;
+  private  ChoiceBox categoryDropDown;
+  private Button addDonationButton;
+  private Button deleteFiltersBtn;
+  private DemandItem selectedDemandItem;
+
+  public DemandItem getSelectedDemandItem() {
+    return selectedDemandItem;
+  }
+
+  public Stage getWindow() {
+    return window;
+  }
+
+  public Button getDeleteFiltersBtn() {
+    return deleteFiltersBtn;
+  }
+
+  public FilteredList<DemandItem> getFilteredDemand() {
+    return filteredDemand;
+  }
+
+  public TextField getTextSearchField() {
+    return textSearchField;
+  }
+
+  public ChoiceBox getFederalStatesDropDown() {
+    return federalStatesDropDown;
+  }
+
+  public TextField getAddressSearchField() {
+    return addressSearchField;
+  }
+
+  public ChoiceBox getCategoryDropDown() {
+    return categoryDropDown;
+  }
+
+  public Button getAddDonationButton() {
+    return addDonationButton;
+  }
 
   public DonationsScene(Stage window) {
     this.window = window;
     mainPane = new VBox(createMainPane());
     mainPane.setId("donations-pane");
-    setFilteredResults();
+    updateResults();
 
     filteredResults.setId("filtered-results-vbox");
 
     donationScene = new Scene(mainPane, 270,550);
     donationScene.getStylesheets().add(DonationsScene.class.getResource("/donationsApp.css").toString());
+    controller = new DonationSceneController(this);
   }
 
   public Scene getDonationScene() {return donationScene;}
 
   private Pane createFilterPane() {
-    TextField textSearchField = new TextField();
+    textSearchField = new TextField();
     textSearchField.setId("text-search-field");
     VBox textSearch = new VBox(new Label("Textsuche:"), textSearchField);
 
-    ChoiceBox federalStatesDropDown = new ChoiceBox();
+    federalStatesDropDown = new ChoiceBox();
     federalStatesDropDown.getItems().add(null);
     federalStatesDropDown.getItems().addAll(FederalState.values());
     VBox federalStateSearch = new VBox(new Label("Bundesland"), federalStatesDropDown);
     federalStateSearch.setId("filter-vBox");
 
-    TextField addressSearchField = new TextField();
+    addressSearchField = new TextField();
     VBox addressSearch = new VBox(new Label("Adresse"), addressSearchField);
     addressSearch.setId("filter-vBox");
 
-    ChoiceBox categoryDropDown = new ChoiceBox();
+    categoryDropDown = new ChoiceBox();
     categoryDropDown.getItems().add(null);
     categoryDropDown.getItems().addAll(Category.values());
     VBox categorySearch = new VBox(new Label("Kategorie"), categoryDropDown);
@@ -65,60 +109,19 @@ public class DonationsScene {
     TilePane filterSelection = new TilePane(federalStateSearch, addressSearch, categorySearch);
     filterSelection.setId("filter-tile-pane");
 
-    Button deleteFilters = new Button("Filter löschen");
-    deleteFilters.setId("standard-button");
+    deleteFiltersBtn = new Button("Filter löschen");
+    deleteFiltersBtn.setId("standard-button");
 
-    FilteredList<DemandItem> filteredDemand = DemandController.getInstance().filteredDemandDonationsApp();
-    textSearchField.textProperty().addListener ((observable, oldValue, newValue)-> {
-      textFilter = newValue.toLowerCase();
-      Predicate<DemandItem> textPredicate = demandItem -> textFilter.equals("")
-              || demandItem.toString().toLowerCase().contains(textFilter)
-              || demandItem.getRelatedArticle().getDescription().toLowerCase().contains(textFilter);
-
-      filteredDemand.setPredicate(textPredicate.and(filteredDemand.getPredicate()));
-      setFilteredResults();
-    });
-
-    addressSearchField.textProperty().addListener ((observable, oldValue, newValue)-> {
-      addressFilter = newValue.toLowerCase();
-      Predicate<DemandItem> addressPredicate = demandItem -> addressFilter.equals("")
-              || demandItem.getRelatedOffice().getAddress().toLowerCase().contains(addressFilter)
-              || demandItem.getRelatedOffice().getDistrict().toLowerCase().contains(addressFilter);
-
-      filteredDemand.setPredicate(addressPredicate.and(filteredDemand.getPredicate()));
-      setFilteredResults();
-    });
-
-    categoryDropDown.setOnAction( e-> {
-      categoryFilter = (Category)categoryDropDown.getValue();
-      Predicate<DemandItem> categoryPredicate = demandItem -> categoryFilter == null
-              || categoryFilter.equals(demandItem.getRelatedArticle().getCategory());
-      filteredDemand.setPredicate(categoryPredicate.and(filteredDemand.getPredicate()));
-      setFilteredResults();
-    });
-
-    federalStatesDropDown.setOnAction( e-> {
-      federalStateFilter = (FederalState) federalStatesDropDown.getValue();
-      Predicate<DemandItem> federalStatePredicate = demandItem -> federalStateFilter == null
-              || federalStateFilter.equals(demandItem.getRelatedOffice().getFederalState());
-      filteredDemand.setPredicate(federalStatePredicate.and(filteredDemand.getPredicate()));
-      setFilteredResults();
-    });
-
-    deleteFilters.setOnAction(event -> {
-      textSearchField.clear();
-      federalStatesDropDown.setValue(null);
-      addressSearchField.clear();
-      categoryDropDown.setValue(null);
-
-    });
-
-    VBox filters = new VBox(textSearch, filterSelection, deleteFilters);
+    VBox filters = new VBox(textSearch, filterSelection, deleteFiltersBtn);
     filters.setId("filters-pane");
     return filters;
   }
 
+  public HashMap<Button, DemandItem> demandButtonHelperStructure = new HashMap<>();
+
   private VBox demandTile(DemandItem d) {
+    selectedDemandItem = d;
+
     GridPane resultGrid = new GridPane();
     resultGrid.setId("donations-grid");
     resultGrid.add(new Label("Kategorie:"),0,0);
@@ -149,10 +152,9 @@ public class DonationsScene {
     temp = d.getRelatedOffice().getAddress() + " (" + d.getRelatedOffice().getDistrict() + ")";
     resultGrid.add(new Label(temp),1,6);
 
-    Button addDonationButton = new Button("jetzt spenden");
+    addDonationButton = new Button("jetzt spenden");
     addDonationButton.setId("button-donate");
-
-    addDonationButton.addEventHandler(ActionEvent.ACTION, (e) -> handleAddDonationEvent(e, d));
+    demandButtonHelperStructure.put(addDonationButton, d);
 
     VBox demandDetailTile = new VBox(resultGrid, addDonationButton);
     demandDetailTile.setId("demand-tile-vbox");
@@ -160,14 +162,8 @@ public class DonationsScene {
     return demandDetailTile;
   }
 
-  private void handleAddDonationEvent(ActionEvent e, DemandItem demandItem) {
-    MakeDonationDialog dialog = new MakeDonationDialog(window, demandItem, this);
-    dialog.showDonationDialog();
-  }
-
-  protected void setFilteredResults() {
+  public void updateResults() {
     filteredResults.getChildren().clear();
-    FilteredList<DemandItem> filteredDemand = DemandController.getInstance().filteredDemandDonationsApp();
 
     for(int i = 0; i < filteredDemand.size(); i++) {
       VBox demandTile = demandTile(filteredDemand.get(i));
@@ -176,7 +172,7 @@ public class DonationsScene {
   }
 
   private Pane createMainPane() {
-    Label curUser = new Label("Benutzer: " + UserController.getInstance().getCurrentUser().getName());
+    Label curUser = new Label("Benutzer: " + dbMock.getInstance().getCurrentUser().getName());
 
     Button myDonationsButton = new Button();
     myDonationsButton.setId("my-donations-button");

@@ -1,4 +1,4 @@
-package at.fhooe.swe4.administration.models;
+package at.fhooe.swe4.model;
 
 public class DemandItem {
   private Integer id;
@@ -49,4 +49,6 @@ public class DemandItem {
   public void setAmount(Integer amount) {
     this.amount = amount;
   }
+
+
 }

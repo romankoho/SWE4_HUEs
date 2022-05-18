@@ -1,6 +1,4 @@
-package at.fhooe.swe4.administration.enums;
-
-import java.util.Arrays;
+package at.fhooe.swe4.model.enums;
 
 public enum Category {
   CLOTHS("Kleidung"),

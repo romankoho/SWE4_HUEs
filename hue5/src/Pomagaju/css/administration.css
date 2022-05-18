@@ -88,3 +88,7 @@
     -fx-hgap: 40;
     -fx-vgap: 20;
 }
+
+#manage-demand-input-amount{
+    -fx-max-width: 150;
+}

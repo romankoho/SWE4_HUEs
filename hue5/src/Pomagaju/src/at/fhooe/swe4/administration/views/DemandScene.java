@@ -1,18 +1,11 @@
 package at.fhooe.swe4.administration.views;
 
-import at.fhooe.swe4.administration.controller.DemandController;
-import at.fhooe.swe4.administration.controller.OfficesController;
-import at.fhooe.swe4.administration.models.Article;
-import at.fhooe.swe4.administration.models.DemandItem;
+import at.fhooe.swe4.administration.controller.DemandSceneController;
+import at.fhooe.swe4.model.*;
 import at.fhooe.swe4.Utilities;
-import at.fhooe.swe4.administration.models.ReceivingOffice;
-import at.fhooe.swe4.donationsApp.controller.DonationsController;
-import at.fhooe.swe4.donationsApp.models.Donation;
-import at.fhooe.swe4.donationsApp.models.User;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.transformation.FilteredList;
-import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -24,20 +17,61 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.time.LocalDate;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Predicate;
 
 public class DemandScene {
 
+  //global scene management
   private Stage window;
   private final Scene mainScene;
   private Pane mainPane;
 
-  private TableView<DemandItem> demandTable;
-  private TableView<Donation> donationsTable;
+  //controller for this scene
+  DemandSceneController controller;
 
-  private String textFilter = null;
-  private LocalDate dateFilter = null;
+  //View nodes
+
+  //Tables
+  private TableView<DemandItem> demandTable;
+  private FilteredList<DemandItem> filteredDemand = new FilteredList<>(dbMock.getInstance().getDemandItems());
+
+  private TableView<Donation> donationsTable;
+  private FilteredList<Donation> filteredDonations = new FilteredList<>(dbMock.getInstance().getDonations());
+
+  //Buttons and input fields
+  private Button addDemandBtn;
+  private Button deleteDemandBtn;
+  private Button editDemandBtn;
+  private Button deleteFiltersBtn;
+  private Button changeActiveOfficeBtn;
+  private TextField textSearchField;
+  private DatePicker datePicker;
+
+  public Stage getWindow() {return window;}
+
+  public FilteredList<DemandItem> getFilteredDemand() {
+    return filteredDemand;
+  }
+  public FilteredList<Donation> getFilteredDonations() {return filteredDonations;}
+  public TableView<DemandItem> getDemandTable() {
+    return demandTable;
+  }
+  public TableView<Donation> getDonationsTable() {
+    return donationsTable;
+  }
+
+  public Button getAddDemandBtn() {
+    return addDemandBtn;
+  }
+  public Button getDeleteDemandBtn() {
+    return deleteDemandBtn;
+  }
+  public Button getEditDemandBtn() {
+    return editDemandBtn;
+  }
+  public Button getChangeActiveOfficeBtn() {return changeActiveOfficeBtn;}
+  public Button getDeleteFiltersBtn() {return deleteFiltersBtn;}
+  public TextField getTextSearchField() {return textSearchField;}
+  public DatePicker getDatePicker() {return datePicker;}
 
   public DemandScene(Stage window) {
     this.window = window;
@@ -49,6 +83,8 @@ public class DemandScene {
 
     mainScene = new Scene(mainPane, 600,600);
     mainScene.getStylesheets().add(getClass().getResource("/administration.css").toString());
+
+    controller = new DemandSceneController(this);
   }
 
   public Scene getMainScene() {
@@ -58,7 +94,7 @@ public class DemandScene {
   private TableView<DemandItem> createDemandTable() {
     TableView<DemandItem> demandTable = new TableView<>();
     demandTable.setId("demand-table");
-    demandTable.setItems(DemandController.getInstance().getFilteredDemand());
+    demandTable.setItems(filteredDemand);
     demandTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
     TableColumn<DemandItem, Integer> idCol = new TableColumn<>("ID");
@@ -82,18 +118,16 @@ public class DemandScene {
 
   private HBox createActiveOfficePane() {
     Label activeOfficeLabel = new Label("aktive Annahmestelle:");
-    Label activeOffice = new Label(OfficesController.getInstance().getActiveOffice().getId().toString() + ": " +
-            OfficesController.getInstance().getActiveOffice().getName());
+    Label activeOffice = new Label(dbMock.getInstance().getActiveOffice().getId().toString() + ": " +
+            dbMock.getInstance().getActiveOffice().getName());
 
     VBox activeOfficeInfo = new VBox(activeOfficeLabel, activeOffice);
     activeOfficeInfo.setId("active-office-info");
 
-    Button changeActiveOffice = new Button("Annahmestelle ändern");
-    changeActiveOffice.setId("standard-button");
+    changeActiveOfficeBtn = new Button("Annahmestelle ändern");
+    changeActiveOfficeBtn.setId("standard-button");
 
-    changeActiveOffice.addEventHandler(ActionEvent.ACTION, (e) -> handleChangeActiveOfficeEvent(e));
-
-    HBox activeOfficeControlBox = new HBox(activeOfficeInfo, changeActiveOffice);
+    HBox activeOfficeControlBox = new HBox(activeOfficeInfo, changeActiveOfficeBtn);
     return activeOfficeControlBox;
   }
 
@@ -102,22 +136,15 @@ public class DemandScene {
     demandHL.setId("headline");
 
     demandTable = createDemandTable();
-    DemandController.getInstance().getFilteredDemand().setPredicate(
-            demandItem -> demandItem.getRelatedOffice().equals(OfficesController.getInstance().getActiveOffice())
-    );
 
-    Button addDemand = Utilities.createTextButton("add-demand", "+");
-    addDemand.setId("standard-button");
-    Button deleteDemand = Utilities.createTextButton("delete-demand", "löschen");
-    deleteDemand.setId("standard-button");
-    Button editDemand = Utilities.createTextButton("edit-demand", "ändern");
-    editDemand.setId("standard-button");
+    addDemandBtn = Utilities.createTextButton("add-demand", "+");
+    addDemandBtn.setId("standard-button");
+    deleteDemandBtn = Utilities.createTextButton("delete-demand", "löschen");
+    deleteDemandBtn.setId("standard-button");
+    editDemandBtn = Utilities.createTextButton("edit-demand", "ändern");
+    editDemandBtn.setId("standard-button");
 
-    addDemand.addEventHandler(ActionEvent.ACTION, (e) -> handleAddDemandEvent(e));
-    deleteDemand.addEventHandler(ActionEvent.ACTION, (e) -> handleDeleteDemandEvent(e));
-    editDemand.addEventHandler(ActionEvent.ACTION, (e) -> handleEditDemandEvent(e));
-
-    HBox demandButtonsPane = new HBox(addDemand, deleteDemand, editDemand);
+    HBox demandButtonsPane = new HBox(addDemandBtn, deleteDemandBtn, editDemandBtn);
     demandButtonsPane.setId("demand-buttons-pane");
 
     VBox demandPane = new VBox(demandHL, demandTable, demandButtonsPane);
@@ -130,15 +157,9 @@ public class DemandScene {
     donationsHL.setId("headline");
 
     VBox filters = createDonationsFilterPane();
-
     donationsTable = createDonationsTable();
-    DonationsController.getInstance().getFilteredDonations().setPredicate(
-            donationItem -> donationItem.getRelatedDemand().getRelatedOffice().equals(OfficesController.getInstance().getActiveOffice())
-    );
-
     VBox donationsBox = new VBox(donationsHL, filters, donationsTable);
     donationsBox.setId("donations-pane-content");
-
 
     return donationsBox;
   }
@@ -146,7 +167,7 @@ public class DemandScene {
   private TableView<Donation> createDonationsTable() {
     TableView<Donation> donationTable = new TableView<>();
     donationTable.setId("donations-table");
-    donationTable.setItems(DonationsController.getInstance().getFilteredDonations());
+    donationTable.setItems(filteredDonations);
     donationTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
     TableColumn<Donation, Article> articleCol = new TableColumn("Hilfsgut");
@@ -187,55 +208,29 @@ public class DemandScene {
 
     donationTable.getColumns().addAll(articleCol, amountCol, dateCol, userCol, officeCol);
 
-
     return donationTable;
   }
 
-
   private VBox createDonationsFilterPane() {
-    TextField textSearchField = new TextField();
+    textSearchField = new TextField();
     textSearchField.setId("text-search-field");
     VBox textSearch = new VBox(new Label("Textsuche:"), textSearchField);
 
-    DatePicker datePicker = new DatePicker();
-    VBox datePickerFilter = new VBox(new Label("Abgabedatum;"), datePicker);
+    datePicker = new DatePicker();
+    VBox datePickerFilter = new VBox(new Label("Abgabedatum:"), datePicker);
     datePickerFilter.setId("date-search-field");
 
     TilePane filterSelection = new TilePane(textSearch, datePickerFilter);
     filterSelection.setId("filter-tile-pane");
 
-    Button deleteFilters = new Button("Filter löschen");
-    deleteFilters.setId("standard-button");
+    deleteFiltersBtn = new Button("Filter löschen");
+    deleteFiltersBtn.setId("standard-button");
 
-    VBox filters = new VBox(filterSelection, deleteFilters);
+    VBox filters = new VBox(filterSelection, deleteFiltersBtn);
     filters.setId("filters-pane");
-
-    FilteredList<Donation> filteredDonations = DonationsController.getInstance().getFilteredDonations();
-
-    textSearchField.textProperty().addListener ((observable, oldValue, newValue)-> {
-      textFilter = newValue.toLowerCase();
-      Predicate<Donation> textPredicate = donationItem -> textFilter.equals("")
-              || donationItem.toString().toLowerCase().contains(textFilter);
-
-      filteredDonations.setPredicate(textPredicate.and(filteredDonations.getPredicate()));
-    });
-
-    datePicker.addEventHandler(ActionEvent.ACTION, (e) -> {
-      dateFilter = datePicker.getValue();
-      Predicate<Donation> datePredicate = donationItem -> dateFilter == null || donationItem.getDate().equals(dateFilter);
-      filteredDonations.setPredicate(datePredicate.and(filteredDonations.getPredicate()));
-    });
-
-
-
-    deleteFilters.addEventHandler(ActionEvent.ACTION, (e) -> {
-      textSearchField.clear();
-      datePicker.setValue(null);
-    });
 
     return filters;
   }
-
 
   private Pane createMainPane() {
     HBox activeOfficeControlBox = createActiveOfficePane();
@@ -244,44 +239,9 @@ public class DemandScene {
     VBox demandPane = createDemandOverview();
     VBox donationsPane = createDonationsOverview();
 
-
-
     VBox mainPane = new VBox(activeOfficeControlBox, new Separator(), demandPane, new Separator(), donationsPane);
     mainPane.setId("demand-pane-content");
 
-    //TODO: Spendenankündigungen nach aktivem Office filtern + überhaupt noch Filter einbauen
-
     return mainPane;
-  }
-
-  private void handleChangeActiveOfficeEvent(Object e) {
-      double x = window.getWidth();
-      double y = window.getHeight();
-      window.setWidth(x);
-      window.setHeight(y);
-
-      LoginScene loginScene = new LoginScene(window);
-      window.setScene(loginScene.getLoginScene());
-  }
-
-  private void handleDeleteDemandEvent(ActionEvent e) {
-    DemandItem demandI = demandTable.getSelectionModel().getSelectedItem();
-    if (demandI != null) {
-      DemandController.getInstance().deleteDemand(demandI);
-    }
-    //demandTable.getSelectionModel().clearSelection();
-  }
-
-  private void handleAddDemandEvent(ActionEvent e) {
-    ManageDemandDialog dialog = new ManageDemandDialog(window, demandTable);
-    dialog.showAddDialog();
-  }
-
-  private void handleEditDemandEvent(ActionEvent e) {
-    DemandItem demandI = demandTable.getSelectionModel().getSelectedItem();
-    if (demandI != null) {
-      ManageDemandDialog dialog = new ManageDemandDialog(window, demandTable);
-      dialog.showEditDialog(demandI);
-    }
   }
 }

@@ -1,10 +1,10 @@
 package at.fhooe.swe4.administration.views;
 
 import at.fhooe.swe4.Utilities;
-import at.fhooe.swe4.administration.controller.OfficesController;
-import at.fhooe.swe4.administration.enums.FederalState;
-import at.fhooe.swe4.administration.enums.Status;
-import at.fhooe.swe4.administration.models.ReceivingOffice;
+import at.fhooe.swe4.administration.controller.ManageOfficesDialogController;
+import at.fhooe.swe4.model.enums.FederalState;
+import at.fhooe.swe4.model.enums.Status;
+import at.fhooe.swe4.model.ReceivingOffice;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -12,18 +12,52 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-import java.util.Random;
-
 public class ManageOfficesDialog {
   private Window owner;
   private Stage dialogStage;
 
+  private ManageOfficesDialogController controller;
+
   private TextField nameInput;
   private ChoiceBox fedStateInput;
   private TextField distInput;
-  private TextField addInput;
+  private TextField addressInput;
   private ChoiceBox statInput;
   private TableView<ReceivingOffice> officesTable;
+  Button addOfficeBtn = new Button("Annahmestelle hinzufügen");
+  Button editOfficeBtn = new Button("Speichern");
+
+  public ChoiceBox getFedStateInput() {
+    return fedStateInput;
+  }
+
+  public TextField getNameInput() {
+    return nameInput;
+  }
+
+  public TextField getDistInput() {
+    return distInput;
+  }
+
+  public TextField getAddressInput() {
+    return addressInput;
+  }
+
+  public ChoiceBox getStatInput() {
+    return statInput;
+  }
+
+  public TableView<ReceivingOffice> getOfficesTable() {
+    return officesTable;
+  }
+
+  public Button getAddOfficeBtn() {
+    return addOfficeBtn;
+  }
+
+  public Button getEditOfficeBtn() {
+    return editOfficeBtn;
+  }
 
   public ManageOfficesDialog(Window owner, TableView<ReceivingOffice> officesTable) {
     this.owner = owner;
@@ -49,8 +83,8 @@ public class ManageOfficesDialog {
     inputGrid.add(distInput,1,2);
 
     inputGrid.add(new Label("Adresse"), 0, 3);
-    addInput = new TextField();
-    inputGrid.add(addInput,1,3);
+    addressInput = new TextField();
+    inputGrid.add(addressInput,1,3);
 
     inputGrid.add(new Label("Status: "),0,4);
     statInput = new ChoiceBox();
@@ -61,48 +95,27 @@ public class ManageOfficesDialog {
   }
 
   private void addOfficeDialog() {
-    Button addButton = new Button("Annahmestelle hinzufügen");
-    addButton.setId("button-add-office");
+    addOfficeBtn.setId("button-add-office");
 
     HBox buttonBar = new HBox(20);
     buttonBar.setId("button-bar");
-    buttonBar.getChildren().add(addButton);
+    buttonBar.getChildren().add(addOfficeBtn);
 
     GridPane inputGrid = createInputGrid();
     inputGrid.add(buttonBar,0,5,3,1);
 
-    addButton.setOnAction(e-> {
-      String name = nameInput.getText();
-      FederalState fedState = (FederalState)fedStateInput.getValue();
-      String dist = distInput.getText();
-      String addr = addInput.getText();
-      Status stat = (Status)statInput.getValue();
-
-      if(name.length()>0 && fedState != null && dist.length()>0 && addr.length()>0 && stat != null) {
-        Random rand = new Random();
-        Integer id = rand.nextInt(10000);
-        OfficesController.getInstance().addOffice(new ReceivingOffice(id, name, fedState, dist, addr, stat));
-
-        nameInput.clear();
-        fedStateInput.setValue(null);
-        distInput.clear();
-        addInput.clear();
-        statInput.setValue(null);
-      }
-    });
-
     Scene dialogScene = new Scene(inputGrid);
     dialogScene.getStylesheets().add(getClass().getResource("/administration.css").toExternalForm());
     Utilities.sceneSetup(owner, dialogStage, dialogScene, "Annahmestelle hinzufügen");
+    controller = new ManageOfficesDialogController(this);
   }
 
   private void editDemandDialog(ReceivingOffice selectedItem){
-    Button saveButton = new Button("Speichern");
-    saveButton.setId(("button-save"));
+    editOfficeBtn.setId(("button-save"));
 
     HBox buttonBar = new HBox(20);
     buttonBar.setId("button-bar");
-    buttonBar.getChildren().add(saveButton);
+    buttonBar.getChildren().add(editOfficeBtn);
 
     GridPane inputGrid = createInputGrid();
 
@@ -111,20 +124,13 @@ public class ManageOfficesDialog {
     nameInput.setText(selectedItem.getName());
     fedStateInput.setValue(selectedItem.getFederalState());
     distInput.setText(selectedItem.getDistrict());
-    addInput.setText(selectedItem.getAddress());
+    addressInput.setText(selectedItem.getAddress());
     statInput.setValue(selectedItem.getStatus());
-
-    saveButton.setOnAction(e -> {
-      OfficesController.getInstance().updateOffice(
-              selectedItem, nameInput.getText(),
-              (FederalState)fedStateInput.getValue(), distInput.getText(),
-              addInput.getText(), (Status)statInput.getValue());
-      officesTable.refresh();
-    });
 
     Scene dialogScene = new Scene(inputGrid);
     dialogScene.getStylesheets().add(getClass().getResource("/administration.css").toExternalForm());
     Utilities.sceneSetup(owner, dialogStage, dialogScene, "Annahmestelle verwalten");
+    controller = new ManageOfficesDialogController(this);
   }
 
   public void showAddDialog() {

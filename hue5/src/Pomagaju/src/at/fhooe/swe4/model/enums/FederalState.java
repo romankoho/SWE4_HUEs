@@ -1,4 +1,4 @@
-package at.fhooe.swe4.administration.enums;
+package at.fhooe.swe4.model.enums;
 
 public enum FederalState {
   VORARLBERG("Vorarlberg"),

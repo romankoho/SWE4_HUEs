@@ -1,10 +1,10 @@
 package at.fhooe.swe4;
 
-import at.fhooe.swe4.administration.controller.OfficesController;
-import at.fhooe.swe4.administration.models.ReceivingOffice;
+import at.fhooe.swe4.model.ReceivingOffice;
 import at.fhooe.swe4.administration.views.ArticleScene;
 import at.fhooe.swe4.administration.views.DemandScene;
 import at.fhooe.swe4.administration.views.OfficesScene;
+import at.fhooe.swe4.model.dbMock;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -84,7 +84,7 @@ public class Utilities {
   public static TableView<ReceivingOffice> createOfficesTable() {
     TableView<ReceivingOffice> officesTable = new TableView<>();
     officesTable.setId("offices-table");
-    officesTable.setItems(OfficesController.getInstance().getOffices());
+    officesTable.setItems(dbMock.getInstance().getOffices());
     officesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
     TableColumn<ReceivingOffice, Integer> idCol = new TableColumn<>("ID");

@@ -1,9 +1,9 @@
 package at.fhooe.swe4.administration.views;
 
 import at.fhooe.swe4.Utilities;
-import at.fhooe.swe4.administration.controller.ArticleController;
-import at.fhooe.swe4.administration.models.Article;
-import javafx.event.ActionEvent;
+import at.fhooe.swe4.administration.controller.ArticleSceneController;
+import at.fhooe.swe4.model.Article;
+import at.fhooe.swe4.model.dbMock;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -17,31 +17,50 @@ import javafx.stage.Stage;
 
 public class ArticleScene {
 
+  //global scene management
   private  Stage window;
   private final Scene manageArticleScene;
-  private  Pane mainPane;
+  private  Pane articlesPane;
 
-  protected TableView<Article> articleTable;
+  //controller for this scene
+  ArticleSceneController controller;
+
+  //View nodes
+  private Button addArticleBtn;
+  private Button deleteArticleBtn;
+  private Button editArticleBtn;
+
+  public Button getAddArticleBtn() {return addArticleBtn;}
+  public Button getDeleteArticleBtn() {return deleteArticleBtn;}
+  private TableView<Article> articleTable;
+
+  //getter
+  public Button getEditArticleBtn() {return editArticleBtn;}
+  public Stage getWindow() {return window;}
+
+  public TableView<Article> getArticleTable() {return articleTable;}
 
   public Scene getManageArticleScene() {return this.manageArticleScene;}
 
   public ArticleScene(Stage window) {
     this.window = window;
 
-    mainPane = new VBox();
-    mainPane.getChildren().add(Utilities.createMenuBar(window));
-    mainPane.getChildren().add(createMainPane());
-    mainPane.setId("articles-pane");
+    articlesPane = new VBox();
+    articlesPane.getChildren().add(Utilities.createMenuBar(window));
+    articlesPane.getChildren().add(createMainPane());
+    articlesPane.setId("articles-pane");
 
-    manageArticleScene = new Scene(mainPane, 600,600);
+    manageArticleScene = new Scene(articlesPane, 600,600);
     manageArticleScene.getStylesheets().add(getClass().getResource("/administration.css").toString());
+
+    controller = new ArticleSceneController(this);
   }
 
   private TableView<Article> createArticleTable() {
     TableView<Article> articleTable = new TableView<>();
     articleTable.setId("article-table");
     articleTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-    articleTable.setItems(ArticleController.getInstance().getArticles());
+    articleTable.setItems(dbMock.getInstance().getArticles());
 
     TableColumn<Article, Integer> idCol = new TableColumn<>("ID");
     TableColumn<Article, String> nameCol = new TableColumn<>("Name");
@@ -75,43 +94,19 @@ public class ArticleScene {
     articlesHL.setId("headline");
     articleTable = createArticleTable();
 
-    Button addArticle = Utilities.createTextButton("add-article", "+");
-    addArticle.setId("standard-button");
-    Button deleteArticle = Utilities.createTextButton("delete-article", "löschen");
-    deleteArticle.setId("standard-button");
-    Button editArticle = Utilities.createTextButton("edit-article", "ändern");
-    editArticle.setId("standard-button");
+    addArticleBtn = Utilities.createTextButton("add-article", "+");
+    addArticleBtn.setId("standard-button");
+    deleteArticleBtn = Utilities.createTextButton("delete-article", "löschen");
+    deleteArticleBtn.setId("standard-button");
+    editArticleBtn = Utilities.createTextButton("edit-article", "ändern");
+    editArticleBtn.setId("standard-button");
 
-    addArticle.addEventHandler(ActionEvent.ACTION, (e) -> handleAddArticleEvent(e));
-    editArticle.addEventHandler(ActionEvent.ACTION, (e) -> handleEditArticleEvent(e));
-    deleteArticle.addEventHandler(ActionEvent.ACTION, (e) -> handleDeleteArticleEvent(e));
-
-    HBox articleButtonPane = new HBox(addArticle, deleteArticle, editArticle);
+    HBox articleButtonPane = new HBox(addArticleBtn, deleteArticleBtn, editArticleBtn);
     articleButtonPane.setId("article-buttons-pane");
 
     VBox articlesPane = new VBox(articlesHL, articleTable, articleButtonPane);
     articlesPane.setId("articles-pane-content");
 
     return articlesPane;
-  }
-
-  private void handleAddArticleEvent(ActionEvent e) {
-    ManageArticlesDialog dialog = new ManageArticlesDialog(window, articleTable);
-    dialog.showAddDialog();
-  }
-
-  private void handleEditArticleEvent(ActionEvent e) {
-    Article selectedArticle = articleTable.getSelectionModel().getSelectedItem();
-    if (selectedArticle != null) {
-      ManageArticlesDialog dialog = new ManageArticlesDialog(window, articleTable);
-      dialog.showEditDialog(selectedArticle);
-    }
-  }
-
-  private void handleDeleteArticleEvent(ActionEvent e) {
-    Article article = articleTable.getSelectionModel().getSelectedItem();
-    if (article != null) {
-      ArticleController.getInstance().deleteArticle(article);
-    }
   }
 }

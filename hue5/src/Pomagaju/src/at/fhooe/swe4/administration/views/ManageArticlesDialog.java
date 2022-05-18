@@ -1,10 +1,10 @@
 package at.fhooe.swe4.administration.views;
 
 import at.fhooe.swe4.Utilities;
-import at.fhooe.swe4.administration.controller.ArticleController;
-import at.fhooe.swe4.administration.models.Article;
-import at.fhooe.swe4.administration.enums.Category;
-import at.fhooe.swe4.administration.enums.Condition;
+import at.fhooe.swe4.administration.controller.ManageArticlesDialogController;
+import at.fhooe.swe4.model.Article;
+import at.fhooe.swe4.model.enums.Category;
+import at.fhooe.swe4.model.enums.Condition;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -12,19 +12,32 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-import java.util.Random;
-
 public class ManageArticlesDialog {
   private Window owner;
   private Stage dialogStage;
-  private TableView<Article> articlesTable;
 
+  private ManageArticlesDialogController controller;
+
+  private TableView<Article> articlesTable;
   private TextField nameInput;
   private TextArea descriptionInput;
   private ChoiceBox conditionInput;
   private ChoiceBox categoryInput;
 
-  protected ManageArticlesDialog(Window owner, TableView<Article> articlesTable) {
+  Button addArticleBtn = new Button("Hilfsgut hinzufügen");
+  Button editArticlesDialog = new Button("Speichern");
+
+  public TextField getNameInput() {return nameInput;}
+  public TextArea getDescriptionInput() {return descriptionInput;}
+  public ChoiceBox getConditionInput() {return conditionInput;}
+  public ChoiceBox getCategoryInput() {return categoryInput;}
+
+  public Button getAddArticleBtn() {return addArticleBtn;}
+  public Button getEditArticlesDialog() {return editArticlesDialog;}
+
+  public TableView<Article> getArticlesTable() {return articlesTable;}
+
+  public ManageArticlesDialog(Window owner, TableView<Article> articlesTable) {
     dialogStage = new Stage();
     this.owner = owner;
     this.articlesTable = articlesTable;
@@ -56,49 +69,29 @@ public class ManageArticlesDialog {
   }
 
   private void addArticleDialog() {
-    Button addButton = new Button("Hilfsgut hinzufügen");
-    addButton.setId("button-add-article");
+    addArticleBtn.setId("button-add-article");
 
     HBox buttonBar = new HBox(20);
     buttonBar.setId("button-bar");
-    buttonBar.getChildren().add(addButton);
+    buttonBar.getChildren().add(addArticleBtn);
 
     GridPane inputGrid = createInputGrid();
     inputGrid.add(buttonBar,0,4,3,1);
 
-    addButton.setOnAction(e-> {
-      String name = nameInput.getText();
-      String desc = descriptionInput.getText();
-      Condition cond = (Condition)conditionInput.getValue();
-      Category categ = (Category)categoryInput.getValue();
-
-      if(name.length() > 0 && desc.length() > 0 && cond != null && categ != null) {
-        Random rand = new Random();
-        Integer id = rand.nextInt(10000);
-        ArticleController.getInstance().addArticle(new Article(id, name, desc, cond, categ));
-
-        nameInput.clear();
-        descriptionInput.clear();
-        conditionInput.setValue(null);
-        categoryInput.setValue(null);
-      }
-    });
-
     Scene dialogScene = new Scene(inputGrid);
     dialogScene.getStylesheets().add(getClass().getResource("/administration.css").toExternalForm());
     Utilities.sceneSetup(owner, dialogStage, dialogScene, "Hilfsgut hinzufügen");
+    controller = new ManageArticlesDialogController(this);
   }
 
-  private void editDemandDialog(Article selectedItem){
-    Button saveButton = new Button("Speichern");
-    saveButton.setId(("button-save"));
+  private void editArticlesDialog(Article selectedItem){
+    editArticlesDialog.setId(("button-save"));
 
     HBox buttonBar = new HBox(20);
     buttonBar.setId("button-bar");
-    buttonBar.getChildren().add(saveButton);
+    buttonBar.getChildren().add(editArticlesDialog);
 
     GridPane inputGrid = createInputGrid();
-
     inputGrid.add(buttonBar,0,4,3,1);
 
     nameInput.setText(selectedItem.getName());
@@ -106,18 +99,10 @@ public class ManageArticlesDialog {
     conditionInput.setValue(selectedItem.getCondition());
     categoryInput.setValue(selectedItem.getCategory());
 
-    saveButton.setOnAction(e -> {
-      ArticleController.getInstance().updateArticle(
-              selectedItem, nameInput.getText(),
-              descriptionInput.getText(),(Condition)conditionInput.getValue(),
-              (Category) categoryInput.getValue());
-
-      articlesTable.refresh();
-    });
-
     Scene dialogScene = new Scene(inputGrid);
     dialogScene.getStylesheets().add(getClass().getResource("/administration.css").toExternalForm());
     Utilities.sceneSetup(owner, dialogStage, dialogScene, "Hilfsgut verwalten");
+    controller = new ManageArticlesDialogController(this);
   }
 
   public void showAddDialog() {
@@ -126,7 +111,7 @@ public class ManageArticlesDialog {
   }
 
   public void showEditDialog(Article selectedItem) {
-    this.editDemandDialog(selectedItem);
+    this.editArticlesDialog(selectedItem);
     dialogStage.show();
   }
 
