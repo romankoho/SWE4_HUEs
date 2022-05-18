@@ -11,24 +11,24 @@ import javafx.stage.Stage;
 
 public class LoginSceneDonations {
 
-    private static Stage window;
-    private static Scene loginSceneDonations;
+    private Stage window;
+    private Scene loginSceneDonations;
 
     public LoginSceneDonations(Stage window) {
         this.window = window;
 
-        Pane loginPane = new VBox(LoginSceneDonations.createLoginPane());
+        Pane loginPane = new VBox(createLoginPane());
         loginPane.setId("login-pane");
 
         loginSceneDonations = new Scene(loginPane,  270,550);
         loginSceneDonations.getStylesheets().add(getClass().getResource("/donationsApp.css").toString());
     }
 
-    public static Scene getLoginScene() {
+    public Scene getLoginScene() {
         return loginSceneDonations;
     }
 
-    private static Pane createLoginPane() {
+    private Pane createLoginPane() {
         Label registerLabel = new Label("Registriere dich jetzt");
         registerLabel.setId("register-label");
         Button registerBtn = new Button("Registrieren");

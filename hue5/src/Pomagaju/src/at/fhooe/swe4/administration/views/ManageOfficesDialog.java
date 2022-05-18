@@ -6,15 +6,10 @@ import at.fhooe.swe4.administration.enums.FederalState;
 import at.fhooe.swe4.administration.enums.Status;
 import at.fhooe.swe4.administration.models.ReceivingOffice;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.stage.Window;
 
 import java.util.Random;
@@ -28,10 +23,12 @@ public class ManageOfficesDialog {
   private TextField distInput;
   private TextField addInput;
   private ChoiceBox statInput;
+  private TableView<ReceivingOffice> officesTable;
 
-  public ManageOfficesDialog(Window owner) {
+  public ManageOfficesDialog(Window owner, TableView<ReceivingOffice> officesTable) {
     this.owner = owner;
     this.dialogStage = new Stage();
+    this.officesTable = officesTable;
   }
 
   private GridPane createInputGrid() {
@@ -122,7 +119,7 @@ public class ManageOfficesDialog {
               selectedItem, nameInput.getText(),
               (FederalState)fedStateInput.getValue(), distInput.getText(),
               addInput.getText(), (Status)statInput.getValue());
-      OfficesScene.officesTable.refresh();
+      officesTable.refresh();
     });
 
     Scene dialogScene = new Scene(inputGrid);

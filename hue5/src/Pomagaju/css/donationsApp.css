@@ -43,7 +43,8 @@
     -fx-max-width: 200;
 }
 
-#button-donate, #register-button, #login-button {
+#button-donate, #register-button, #login-button,
+#make-donation-button, #tokenClose-btn{
     -fx-padding: 5;
     -fx-min-height: 35;
     -fx-min-width: 100;
@@ -53,7 +54,8 @@
     -fx-spacing: 10;
 }
 
-#button-donate:hover, #register-button:hover, #login-button:hover{
+#button-donate:hover, #register-button:hover, #login-button:hover,
+#make-donation-button:hover, #tokenClose-btn:hover{
     -fx-background-color: #4293EA;
 }
 
@@ -93,11 +95,31 @@
     -fx-spacing: 10;
 }
 
-#registerBox-dialog, #loginBox-dialog {
+#registerBox-dialog, #loginBox-dialog, #make-donation-dialog {
     -fx-vgap: 15;
     -fx-padding: 10;
     -fx-hgap: 15;
     -fx-spacing: 20;
 }
+
+#make-donation-input-VBox, #token-VBox{
+    -fx-spacing: 20;
+}
+
+#token-label{
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+}
+
+#token-label, #token-intro-label{
+    -fx-text-alignment: center;
+}
+
+#token-VBox{
+    -fx-alignment: center;
+}
+
+
+
 
 

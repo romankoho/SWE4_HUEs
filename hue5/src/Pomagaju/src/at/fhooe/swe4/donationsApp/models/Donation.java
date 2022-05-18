@@ -17,6 +17,13 @@ public class Donation {
     this.amount = amount;
   }
 
+  @Override
+  public String toString() {
+    return relatedDemand +", " + date +
+            ", " + user +
+            ", " + amount;
+  }
+
   public DemandItem getRelatedDemand() {
     return relatedDemand;
   }

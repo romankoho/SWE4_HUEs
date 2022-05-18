@@ -11,9 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.stage.Window;
 
 import java.util.Random;
@@ -26,10 +24,12 @@ public class ManageDemandDialog {
   private ChoiceBox articleDropDown;
   private ChoiceBox officeDropDown;
   private HBox amountControl;
+  private TableView<DemandItem> demandTable;
 
-  protected ManageDemandDialog(Window owner) {
+  public ManageDemandDialog(Window owner, TableView<DemandItem> demandTable) {
     dialogStage = new Stage();
     this.owner = owner;
+    this.demandTable = demandTable;
   }
 
   private HBox createAmountSelection(Integer startAmount) {
@@ -130,7 +130,7 @@ public class ManageDemandDialog {
       DemandController.getInstance().getFilteredDemand().setPredicate(
               demandItem -> demandItem.getRelatedOffice().equals(OfficesController.getInstance().getActiveOffice())
       );
-      DemandScene.demandTable.refresh();
+      demandTable.refresh();
     });
 
     Scene dialogScene = new Scene(inputGrid);

@@ -58,4 +58,10 @@ public class DemandController {
     d.setRelatedOffice(relatedOffice);
     d.setAmount(amount);
   }
+
+  public void reduceDemand(DemandItem d, Integer amount) {
+    d.setAmount(d.getAmount()-amount);
+  }
+
+
 }

@@ -12,8 +12,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.util.regex.Pattern;
-
 public class LoginDialog {
   private Stage window;
   private Stage dialogStage;

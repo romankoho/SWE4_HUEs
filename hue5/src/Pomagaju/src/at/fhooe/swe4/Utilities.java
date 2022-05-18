@@ -1,15 +1,15 @@
 package at.fhooe.swe4;
 
+import at.fhooe.swe4.administration.controller.OfficesController;
+import at.fhooe.swe4.administration.models.ReceivingOffice;
 import at.fhooe.swe4.administration.views.ArticleScene;
 import at.fhooe.swe4.administration.views.DemandScene;
 import at.fhooe.swe4.administration.views.OfficesScene;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -79,6 +79,43 @@ public class Utilities {
     stage.initModality(Modality.WINDOW_MODAL);
     stage.initStyle(StageStyle.UTILITY);
     stage.initOwner(owner);
+  }
+
+  public static TableView<ReceivingOffice> createOfficesTable() {
+    TableView<ReceivingOffice> officesTable = new TableView<>();
+    officesTable.setId("offices-table");
+    officesTable.setItems(OfficesController.getInstance().getOffices());
+    officesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+    TableColumn<ReceivingOffice, Integer> idCol = new TableColumn<>("ID");
+    TableColumn<ReceivingOffice, String> nameCol = new TableColumn<>("Name");
+    TableColumn<ReceivingOffice, String> fedStateCol = new TableColumn<>("Bundesland");
+    TableColumn<ReceivingOffice, String> distCol = new TableColumn<>("Bezirk");
+    TableColumn<ReceivingOffice, String> addCol = new TableColumn<>("Adresse");
+    TableColumn<ReceivingOffice, String> statCol = new TableColumn<>("Status");
+
+    idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+    nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+    fedStateCol.setCellValueFactory(new PropertyValueFactory<>("federalState"));
+    distCol.setCellValueFactory(new PropertyValueFactory<>("district"));
+    addCol.setCellValueFactory(new PropertyValueFactory<>("address"));
+    statCol.setCellValueFactory(new PropertyValueFactory<>("status"));
+
+    idCol.setMinWidth(40);
+    nameCol.setMinWidth(150);
+    fedStateCol.setMinWidth(80);
+    distCol.setMinWidth(80);
+    addCol.setMinWidth(150);
+    statCol.setMinWidth(80);
+
+    officesTable.getColumns().add(idCol);
+    officesTable.getColumns().add(nameCol);
+    officesTable.getColumns().add(addCol);
+    officesTable.getColumns().add(fedStateCol);
+    officesTable.getColumns().add(distCol);
+    officesTable.getColumns().add(statCol);
+
+    return officesTable;
   }
 
 }

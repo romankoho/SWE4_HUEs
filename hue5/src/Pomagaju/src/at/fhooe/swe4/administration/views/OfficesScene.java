@@ -18,11 +18,11 @@ import javafx.stage.Stage;
 
 public class OfficesScene {
 
-  private static Stage window;
+  private Stage window;
   private final Scene manageOfficesScene;
-  private static Pane mainPane;
+  private Pane mainPane;
 
-  protected static TableView<ReceivingOffice> officesTable;
+  protected TableView<ReceivingOffice> officesTable;
 
   public Scene getOfficesScene() {return this.manageOfficesScene;}
 
@@ -38,47 +38,10 @@ public class OfficesScene {
     manageOfficesScene.getStylesheets().add(getClass().getResource("/administration.css").toString());
   }
 
-  protected static TableView<ReceivingOffice> createOfficesTable() {
-    TableView<ReceivingOffice> officesTable = new TableView<>();
-    officesTable.setId("offices-table");
-    officesTable.setItems(OfficesController.getInstance().getOffices());
-    officesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-    TableColumn<ReceivingOffice, Integer> idCol = new TableColumn<>("ID");
-    TableColumn<ReceivingOffice, String> nameCol = new TableColumn<>("Name");
-    TableColumn<ReceivingOffice, String> fedStateCol = new TableColumn<>("Bundesland");
-    TableColumn<ReceivingOffice, String> distCol = new TableColumn<>("Bezirk");
-    TableColumn<ReceivingOffice, String> addCol = new TableColumn<>("Adresse");
-    TableColumn<ReceivingOffice, String> statCol = new TableColumn<>("Status");
-
-    idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-    nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-    fedStateCol.setCellValueFactory(new PropertyValueFactory<>("federalState"));
-    distCol.setCellValueFactory(new PropertyValueFactory<>("district"));
-    addCol.setCellValueFactory(new PropertyValueFactory<>("address"));
-    statCol.setCellValueFactory(new PropertyValueFactory<>("status"));
-
-    idCol.setMinWidth(40);
-    nameCol.setMinWidth(150);
-    fedStateCol.setMinWidth(80);
-    distCol.setMinWidth(80);
-    addCol.setMinWidth(150);
-    statCol.setMinWidth(80);
-
-    officesTable.getColumns().add(idCol);
-    officesTable.getColumns().add(nameCol);
-    officesTable.getColumns().add(addCol);
-    officesTable.getColumns().add(fedStateCol);
-    officesTable.getColumns().add(distCol);
-    officesTable.getColumns().add(statCol);
-
-    return officesTable;
-  }
-
-  protected static Pane createMainPane() {
+  protected Pane createMainPane() {
     Label articlesHL = new Label("Übersicht über Annahmestellen");
     articlesHL.setId("headline");
-    officesTable = createOfficesTable();
+    officesTable = Utilities.createOfficesTable();
 
     Button addOffice = Utilities.createTextButton("add-office", "+");
     addOffice.setId("standard-button");
@@ -100,23 +63,23 @@ public class OfficesScene {
     return articlesPane;
   }
 
-  private static void handleDeleteOfficeEvent(ActionEvent e) {
+  private void handleDeleteOfficeEvent(ActionEvent e) {
     ReceivingOffice office = officesTable.getSelectionModel().getSelectedItem();
     if (office != null && !DemandController.getInstance().demandIsLinkedToReceivingOffice(office)) {
       OfficesController.getInstance().deleteOffice(office);
     }
   }
 
-  private static void handleEditOfficeEvent(ActionEvent e) {
+  private void handleEditOfficeEvent(ActionEvent e) {
     ReceivingOffice office = officesTable.getSelectionModel().getSelectedItem();
     if (office != null) {
-      ManageOfficesDialog dialog = new ManageOfficesDialog(window);
+      ManageOfficesDialog dialog = new ManageOfficesDialog(window, officesTable);
       dialog.showEditDialog(office);
     }
   }
 
-  private static void handleAddOfficeEvent(ActionEvent e) {
-    ManageOfficesDialog dialog = new ManageOfficesDialog(window);
+  private void handleAddOfficeEvent(ActionEvent e) {
+    ManageOfficesDialog dialog = new ManageOfficesDialog(window, officesTable);
     dialog.showAddDialog();
   }
 

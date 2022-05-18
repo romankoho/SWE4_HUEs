@@ -7,8 +7,9 @@
     -fx-min-width: 100;
 }
 
-#demand-table, #offices-table, #article-table{
-    -fx-max-width: 1000;
+#demand-table, #offices-table, #article-table, #donations-table{
+    -fx-max-width: 1500;
+    -fx-max-height: 400;
     -fx-border-color: grey;
 }
 
@@ -74,4 +75,16 @@
 #login-screen-start-pane {
     -fx-alignment: center;
     -fx-spacing: 20;
+}
+
+#filters-pane{
+    -fx-padding: 10;
+    -fx-spacing: 10;
+    -fx-hgap: 20;
+    -fx-vgap: 20;
+}
+
+#filter-tile-pane{
+    -fx-hgap: 40;
+    -fx-vgap: 20;
 }

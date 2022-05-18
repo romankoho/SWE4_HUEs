@@ -16,7 +16,8 @@ public class Administration extends Application {
 
     window.setScene(loginScene.getLoginScene());
     window.setMinWidth(400);
-    window.setWidth(800);
+    window.setWidth(1000);
+    window.setHeight(800);
     window.setMinHeight(400);
 
     window.setTitle("Pomagaju Annahmestellen Verwaltungsservice");

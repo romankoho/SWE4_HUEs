@@ -21,10 +21,14 @@ public class UserController {
     return obj;
   }
 
+  public static HashMap<String, User> getUsers() {
+    return users;
+  }
+
   private void initWithTestData() {
-    users.put("admin", new User("Roman Kofler-Hofer", "admin"));
-    users.put("John Doe", new User("Jon Doe", "1234"));
-    users.put("Jane Doe", new User("Jane Doe", "save"));
+    users.put("admin@admin.at", new User("Roman Kofler-Hofer", "admin", "admin@admin.at"));
+    users.put("john.doe@gmail.com", new User("Jon Doe", "1234", "john.doe@gmail.com"));
+    users.put("jane.doe@gmail.com", new User("Jane Doe", "save", "jane.doe@gmail.com"));
   }
 
   public void addUser(String key, User user) {

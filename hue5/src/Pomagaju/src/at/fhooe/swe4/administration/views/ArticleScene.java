@@ -17,11 +17,11 @@ import javafx.stage.Stage;
 
 public class ArticleScene {
 
-  private static Stage window;
+  private  Stage window;
   private final Scene manageArticleScene;
-  private static Pane mainPane;
+  private  Pane mainPane;
 
-  protected static TableView<Article> articleTable;
+  protected TableView<Article> articleTable;
 
   public Scene getManageArticleScene() {return this.manageArticleScene;}
 
@@ -37,7 +37,7 @@ public class ArticleScene {
     manageArticleScene.getStylesheets().add(getClass().getResource("/administration.css").toString());
   }
 
-  private static TableView<Article> createArticleTable() {
+  private TableView<Article> createArticleTable() {
     TableView<Article> articleTable = new TableView<>();
     articleTable.setId("article-table");
     articleTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -70,7 +70,7 @@ public class ArticleScene {
     return articleTable;
   }
 
-  protected static Pane createMainPane() {
+  protected Pane createMainPane() {
     Label articlesHL = new Label("Übersicht über Hilfsgüter");
     articlesHL.setId("headline");
     articleTable = createArticleTable();
@@ -95,20 +95,20 @@ public class ArticleScene {
     return articlesPane;
   }
 
-  private static void handleAddArticleEvent(ActionEvent e) {
-    ManageArticlesDialog dialog = new ManageArticlesDialog(window);
+  private void handleAddArticleEvent(ActionEvent e) {
+    ManageArticlesDialog dialog = new ManageArticlesDialog(window, articleTable);
     dialog.showAddDialog();
   }
 
-  private static void handleEditArticleEvent(ActionEvent e) {
+  private void handleEditArticleEvent(ActionEvent e) {
     Article selectedArticle = articleTable.getSelectionModel().getSelectedItem();
     if (selectedArticle != null) {
-      ManageArticlesDialog dialog = new ManageArticlesDialog(window);
+      ManageArticlesDialog dialog = new ManageArticlesDialog(window, articleTable);
       dialog.showEditDialog(selectedArticle);
     }
   }
 
-  private static void handleDeleteArticleEvent(ActionEvent e) {
+  private void handleDeleteArticleEvent(ActionEvent e) {
     Article article = articleTable.getSelectionModel().getSelectedItem();
     if (article != null) {
       ArticleController.getInstance().deleteArticle(article);

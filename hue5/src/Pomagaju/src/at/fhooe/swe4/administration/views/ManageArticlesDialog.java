@@ -9,9 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.stage.Window;
 
 import java.util.Random;
@@ -19,15 +17,17 @@ import java.util.Random;
 public class ManageArticlesDialog {
   private Window owner;
   private Stage dialogStage;
+  private TableView<Article> articlesTable;
 
   private TextField nameInput;
   private TextArea descriptionInput;
   private ChoiceBox conditionInput;
   private ChoiceBox categoryInput;
 
-  protected ManageArticlesDialog(Window owner) {
+  protected ManageArticlesDialog(Window owner, TableView<Article> articlesTable) {
     dialogStage = new Stage();
     this.owner = owner;
+    this.articlesTable = articlesTable;
   }
 
   private GridPane createInputGrid() {
@@ -108,10 +108,11 @@ public class ManageArticlesDialog {
 
     saveButton.setOnAction(e -> {
       ArticleController.getInstance().updateArticle(
-              selectedItem, descriptionInput.getText(),
+              selectedItem, nameInput.getText(),
               descriptionInput.getText(),(Condition)conditionInput.getValue(),
               (Category) categoryInput.getValue());
-      ArticleScene.articleTable.refresh();
+
+      articlesTable.refresh();
     });
 
     Scene dialogScene = new Scene(inputGrid);

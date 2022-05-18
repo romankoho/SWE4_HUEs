@@ -18,7 +18,7 @@ public class RegisterDialog {
     private Stage window;
     private Stage dialogStage;
 
-    protected RegisterDialog(Stage window) {
+    public RegisterDialog(Stage window) {
         dialogStage = new Stage();
         this.window = window;
     }
@@ -83,7 +83,7 @@ public class RegisterDialog {
             email.setStyle(null);
             pw.setStyle(null);
             pwConfirm.setStyle(null);
-            User newUser = new User(name.getText(), pw.getText());
+            User newUser = new User(name.getText(), pw.getText(), email.getText());
             UserController.getInstance().addUser(email.getText(), newUser);
             UserController.getInstance().setCurrentUser(newUser);
 

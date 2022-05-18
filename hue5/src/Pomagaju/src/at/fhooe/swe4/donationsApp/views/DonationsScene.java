@@ -6,6 +6,7 @@ import at.fhooe.swe4.administration.enums.FederalState;
 import at.fhooe.swe4.administration.models.DemandItem;
 import at.fhooe.swe4.donationsApp.controller.UserController;
 import javafx.collections.transformation.FilteredList;
+import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -15,11 +16,11 @@ import java.util.function.Predicate;
 
 public class DonationsScene {
 
-  private static Stage window;
+  private Stage window;
   private final Scene donationScene;
-  private static Pane mainPane;
+  private Pane mainPane;
 
-  private static VBox filteredResults = new VBox();
+  private  VBox filteredResults = new VBox();
 
   private Category categoryFilter = null;
   private FederalState federalStateFilter = null;
@@ -151,14 +152,20 @@ public class DonationsScene {
     Button addDonationButton = new Button("jetzt spenden");
     addDonationButton.setId("button-donate");
 
-    //TODO button press handeln
+    addDonationButton.addEventHandler(ActionEvent.ACTION, (e) -> handleAddDonationEvent(e, d));
 
     VBox demandDetailTile = new VBox(resultGrid, addDonationButton);
     demandDetailTile.setId("demand-tile-vbox");
+
     return demandDetailTile;
   }
 
-  private void setFilteredResults() {
+  private void handleAddDonationEvent(ActionEvent e, DemandItem demandItem) {
+    MakeDonationDialog dialog = new MakeDonationDialog(window, demandItem, this);
+    dialog.showDonationDialog();
+  }
+
+  protected void setFilteredResults() {
     filteredResults.getChildren().clear();
     FilteredList<DemandItem> filteredDemand = DemandController.getInstance().filteredDemandDonationsApp();
 
