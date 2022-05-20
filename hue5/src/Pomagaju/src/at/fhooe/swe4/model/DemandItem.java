@@ -1,10 +1,13 @@
 package at.fhooe.swe4.model;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+
 public class DemandItem {
   private Integer id;
   private Article relatedArticle;
   private ReceivingOffice relatedOffice;
-  private Integer amount;
+  private IntegerProperty amount;
 
   public Integer getId() {
     return id;
@@ -18,7 +21,12 @@ public class DemandItem {
     this.id = id;
     this.relatedArticle = relatedGood;
     this.relatedOffice = relatedOffice;
-    this.amount = amount;
+    this.amount = new SimpleIntegerProperty();
+    this.amount.setValue(amount);
+  }
+
+  public IntegerProperty getObsAmount() {
+    return amount;
   }
 
   @Override
@@ -43,12 +51,10 @@ public class DemandItem {
   }
 
   public Integer getAmount() {
-    return amount;
+    return amount.getValue();
   }
 
   public void setAmount(Integer amount) {
-    this.amount = amount;
+    this.amount.setValue(amount);
   }
-
-
 }

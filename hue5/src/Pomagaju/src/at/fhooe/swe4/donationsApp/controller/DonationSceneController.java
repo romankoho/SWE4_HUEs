@@ -3,8 +3,11 @@ package at.fhooe.swe4.donationsApp.controller;
 import at.fhooe.swe4.donationsApp.views.DonationsScene;
 import at.fhooe.swe4.donationsApp.views.MakeDonationDialog;
 import at.fhooe.swe4.model.DemandItem;
+import at.fhooe.swe4.model.dbMock;
 import at.fhooe.swe4.model.enums.Category;
 import at.fhooe.swe4.model.enums.FederalState;
+import javafx.collections.ListChangeListener;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 
@@ -13,6 +16,8 @@ import java.util.function.Predicate;
 
 public class DonationSceneController {
   private DonationsScene view;
+
+  private FilteredList<DemandItem> filteredDemand = new FilteredList<>(dbMock.getInstance().getDemandItems());
   private String textFilter;
   private String addressFilter;
   private Category categoryFilter;
@@ -23,10 +28,31 @@ public class DonationSceneController {
     setView();
   }
 
-  private void setView() {
+  public void addEventListenersToResultList(){
     Set<Button> keySet = view.demandButtonHelperStructure.keySet();
     for(Button b : keySet) {
       b.addEventHandler(ActionEvent.ACTION, e -> handleAddDonationEvent(e, view.demandButtonHelperStructure.get(b)));
+    }
+  }
+
+  private void setView() {
+    addEventListenersToResultList();
+
+    //EventListener for completely deleted demandItem
+    dbMock.getInstance().getDemandItems().addListener(new ListChangeListener<DemandItem>() {
+      @Override
+      public void onChanged(Change<? extends DemandItem> c) {
+        view.updateResults();
+        addEventListenersToResultList();
+      }
+    });
+
+    //EventListener for changes of amount of deamnd
+    for(int i = 0; i < dbMock.getInstance().getDemandItems().size(); i++) {
+      dbMock.getInstance().getDemandItems().get(i).getObsAmount().addListener((observable, oldValue, newValue) -> {
+        view.updateResults();
+        addEventListenersToResultList();
+      });
     }
 
     view.getTextSearchField().textProperty().addListener ((observable, oldValue, newValue)-> {
@@ -50,8 +76,6 @@ public class DonationSceneController {
     });
 
     view.getDeleteFiltersBtn().addEventHandler(ActionEvent.ACTION, (e) -> handleDeleteFiltersEvent(e));
-
-    //view.getAddDonationButton().addEventHandler(ActionEvent.ACTION, (e) -> handleAddDonationEvent(e, view.getSelectedDemandItem()));
   }
 
   private void handleDeleteFiltersEvent(ActionEvent e) {
@@ -64,13 +88,12 @@ public class DonationSceneController {
   }
 
   private void handleAddDonationEvent(ActionEvent e, DemandItem demandItem) {
-    System.out.println(demandItem.toString());
-    MakeDonationDialog dialog = new MakeDonationDialog(view.getWindow(), demandItem, null);
+    MakeDonationDialog dialog = new MakeDonationDialog(view.getWindow(), demandItem, view);
     dialog.showDonationDialog();
   }
 
   private void filterDonations() {
-    Predicate<DemandItem> textPredicate = demandItem -> textFilter.equals("")
+    Predicate<DemandItem> textPredicate = demandItem -> textFilter == null
             || demandItem.toString().toLowerCase().contains(textFilter)
             || demandItem.getRelatedArticle().getDescription().toLowerCase().contains(textFilter);
 
@@ -89,4 +112,5 @@ public class DonationSceneController {
 
     view.updateResults();
   }
+
 }

@@ -6,6 +6,7 @@ import at.fhooe.swe4.administration.views.ManageDemandDialog;
 import at.fhooe.swe4.model.DemandItem;
 import at.fhooe.swe4.model.Donation;
 import at.fhooe.swe4.model.dbMock;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 
 import java.time.LocalDate;
@@ -13,6 +14,9 @@ import java.util.function.Predicate;
 
 public class DemandSceneController {
   private DemandScene view;
+
+  private FilteredList<DemandItem> filteredDemand = new FilteredList<>(dbMock.getInstance().getDemandItems());
+  private FilteredList<Donation> filteredDonations = new FilteredList<>(dbMock.getInstance().getDonations());
 
   private LocalDate dateFilter;
   private String textFilter;
@@ -23,11 +27,14 @@ public class DemandSceneController {
   }
 
   public void setView() {
-    view.getFilteredDemand().setPredicate(
+    view.getDemandTable().setItems(filteredDemand);
+    view.getDonationsTable().setItems(filteredDonations);
+
+    filteredDemand.setPredicate(
             demandItem -> demandItem.getRelatedOffice().equals(dbMock.getInstance().getActiveOffice())
     );
 
-    view.getFilteredDonations().setPredicate(
+    filteredDonations.setPredicate(
             donationItem -> donationItem.getRelatedDemand().getRelatedOffice().equals(dbMock.getInstance().getActiveOffice())
     );
 
@@ -50,7 +57,7 @@ public class DemandSceneController {
     Predicate<Donation> datePredicate = donationItem -> dateFilter == null || donationItem.getDate().equals(dateFilter);
     Predicate<Donation> officePredicate = donationItem -> donationItem.getRelatedDemand().getRelatedOffice().equals(dbMock.getInstance().getActiveOffice());
 
-    view.getFilteredDonations().setPredicate(datePredicate.and(stringPredicate).and(officePredicate));
+    filteredDonations.setPredicate(datePredicate.and(stringPredicate).and(officePredicate));
   }
 
   private void handlePickDateEvent(ActionEvent e) {
@@ -61,8 +68,8 @@ public class DemandSceneController {
   private void handleDeleteFiltersEvent(ActionEvent e) {
       view.getTextSearchField().clear();
       view.getDatePicker().setValue(null);
-      view.getFilteredDonations().setPredicate(null);
-      view.getFilteredDonations().setPredicate(
+      filteredDonations.setPredicate(null);
+      filteredDonations.setPredicate(
               donationItem -> donationItem.getRelatedDemand().getRelatedOffice().equals(dbMock.getInstance().getActiveOffice())
       );
   }

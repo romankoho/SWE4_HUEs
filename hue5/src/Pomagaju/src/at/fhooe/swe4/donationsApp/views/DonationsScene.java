@@ -11,9 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class DonationsScene {
 
@@ -34,8 +32,8 @@ public class DonationsScene {
   private Button deleteFiltersBtn;
   private DemandItem selectedDemandItem;
 
-  public DemandItem getSelectedDemandItem() {
-    return selectedDemandItem;
+  public VBox getFilteredResults() {
+    return filteredResults;
   }
 
   public Stage getWindow() {
@@ -74,9 +72,9 @@ public class DonationsScene {
     this.window = window;
     mainPane = new VBox(createMainPane());
     mainPane.setId("donations-pane");
-    updateResults();
 
     filteredResults.setId("filtered-results-vbox");
+    updateResults();
 
     donationScene = new Scene(mainPane, 270,550);
     donationScene.getStylesheets().add(DonationsScene.class.getResource("/donationsApp.css").toString());
@@ -119,7 +117,7 @@ public class DonationsScene {
 
   public HashMap<Button, DemandItem> demandButtonHelperStructure = new HashMap<>();
 
-  private VBox demandTile(DemandItem d) {
+  public VBox createDemandTile(DemandItem d) {
     selectedDemandItem = d;
 
     GridPane resultGrid = new GridPane();
@@ -129,8 +127,10 @@ public class DonationsScene {
     resultGrid.add(new Label(temp),1,0);
 
     resultGrid.add(new Label("benötigte Menge:"),0,1);
-    temp = d.getAmount().toString();
-    resultGrid.add(new Label(temp),1,1);
+
+    String amount = d.getAmount().toString();
+    Label amountLabel = new Label(amount);
+    resultGrid.add(amountLabel,1,1);
 
     resultGrid.add(new Label("Hilfsgut:"),0,2);
     temp = d.getRelatedArticle().getName();
@@ -162,15 +162,6 @@ public class DonationsScene {
     return demandDetailTile;
   }
 
-  public void updateResults() {
-    filteredResults.getChildren().clear();
-
-    for(int i = 0; i < filteredDemand.size(); i++) {
-      VBox demandTile = demandTile(filteredDemand.get(i));
-      filteredResults.getChildren().add(demandTile);
-    }
-  }
-
   private Pane createMainPane() {
     Label curUser = new Label("Benutzer: " + dbMock.getInstance().getCurrentUser().getName());
 
@@ -188,5 +179,15 @@ public class DonationsScene {
     VBox donationsPane = new VBox(myDonations, new Separator(), filters, new Separator(), scrollArea);
     donationsPane.setId("donations-pane-content");
     return donationsPane;
+  }
+
+  public void updateResults() {
+    filteredResults.getChildren().clear();
+    demandButtonHelperStructure.clear();
+
+    for(int i = 0; i < filteredDemand.size(); i++) {
+      VBox demandTile = createDemandTile(filteredDemand.get(i));
+      filteredResults.getChildren().add(demandTile);
+    }
   }
 }

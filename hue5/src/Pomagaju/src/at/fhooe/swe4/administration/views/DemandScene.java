@@ -32,10 +32,8 @@ public class DemandScene {
 
   //Tables
   private TableView<DemandItem> demandTable;
-  private FilteredList<DemandItem> filteredDemand = new FilteredList<>(dbMock.getInstance().getDemandItems());
-
   private TableView<Donation> donationsTable;
-  private FilteredList<Donation> filteredDonations = new FilteredList<>(dbMock.getInstance().getDonations());
+
 
   //Buttons and input fields
   private Button addDemandBtn;
@@ -48,10 +46,6 @@ public class DemandScene {
 
   public Stage getWindow() {return window;}
 
-  public FilteredList<DemandItem> getFilteredDemand() {
-    return filteredDemand;
-  }
-  public FilteredList<Donation> getFilteredDonations() {return filteredDonations;}
   public TableView<DemandItem> getDemandTable() {
     return demandTable;
   }
@@ -94,7 +88,6 @@ public class DemandScene {
   private TableView<DemandItem> createDemandTable() {
     TableView<DemandItem> demandTable = new TableView<>();
     demandTable.setId("demand-table");
-    demandTable.setItems(filteredDemand);
     demandTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
     TableColumn<DemandItem, Integer> idCol = new TableColumn<>("ID");
@@ -167,7 +160,6 @@ public class DemandScene {
   private TableView<Donation> createDonationsTable() {
     TableView<Donation> donationTable = new TableView<>();
     donationTable.setId("donations-table");
-    donationTable.setItems(filteredDonations);
     donationTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
     TableColumn<Donation, Article> articleCol = new TableColumn("Hilfsgut");

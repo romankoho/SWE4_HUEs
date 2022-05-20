@@ -68,10 +68,10 @@ public class dbMock {
     users.put("jane.doe@gmail.com", new User("Jane Doe", "save", "jane.doe@gmail.com"));
 
     //donations
-    Donation d1 = new Donation(demand.get(0), LocalDate.of(2022,5,30), getUserByEMail("admin@admin.at"),1);
+    Donation d1 = new Donation(demand.get(0), LocalDate.of(2022,5,30), getUserByEMail("admin"),1);
     Donation d2 = new Donation(demand.get(0), LocalDate.of(2022,6,10), getUserByEMail("john.doe@gmail.com"),2);
     Donation d3 = new Donation(demand.get(1), LocalDate.of(2022,5,27), getUserByEMail("jane.doe@gmail.com"),1);
-    Donation d4 = new Donation(demand.get(1), LocalDate.of(2022,6,9), getUserByEMail("admin@admin.at"),3);
+    Donation d4 = new Donation(demand.get(1), LocalDate.of(2022,6,9), getUserByEMail("admin"),3);
     Donation d5 = new Donation(demand.get(2), LocalDate.of(2022,6,7), getUserByEMail("john.doe@gmail.com"),4);
     Donation d6 = new Donation(demand.get(2), LocalDate.of(2022,6,10), getUserByEMail("jane.doe@gmail.com"),2);
     donations.addAll(d1,d2,d3,d4,d5,d6);

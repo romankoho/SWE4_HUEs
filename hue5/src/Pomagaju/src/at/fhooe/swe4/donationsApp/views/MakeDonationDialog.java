@@ -1,9 +1,8 @@
 package at.fhooe.swe4.donationsApp.views;
 
 import at.fhooe.swe4.Utilities;
+import at.fhooe.swe4.donationsApp.controller.MakeDonationDialogController;
 import at.fhooe.swe4.model.DemandItem;
-import at.fhooe.swe4.model.Donation;
-import at.fhooe.swe4.model.dbMock;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -16,21 +15,46 @@ import java.time.LocalDate;
 public class MakeDonationDialog {
   private Window owner;
   private Stage dialogStage;
-  private DemandItem demandItem;
+  private DemandItem selectedDemandItem;
   private DonationsScene ownerScene;
   private Scene dialogScene;
   private VBox makeDonationVBox;
+  private MakeDonationDialogController controller;
+
+  private Button donateButton;
+  private DatePicker datePicker;
+  private TextField amount;
+
+  public DonationsScene getOwnerScene() {
+    return ownerScene;
+  }
+
+  public DemandItem getSelectedDemandItem() {
+    return selectedDemandItem;
+  }
+
+  public DatePicker getDatePicker() {
+    return datePicker;
+  }
+
+  public TextField getAmount() {
+    return amount;
+  }
+
+  public Button getDonateButton() {
+    return donateButton;
+  }
 
   public MakeDonationDialog(Window owner, DemandItem demandItem, DonationsScene ownerScene) {
     dialogStage = new Stage();
     this.owner = owner;
-    this.demandItem = demandItem;
+    this.selectedDemandItem = demandItem;
     this.ownerScene = ownerScene;
   }
 
   private void makeDonationDialog() {
 
-    DatePicker datePicker = new DatePicker();
+    datePicker = new DatePicker();
     datePicker.setId("make-donation-DatePicker");
 
     //allow only future dates
@@ -44,17 +68,15 @@ public class MakeDonationDialog {
 
     VBox dateBox = new VBox(new Label("Abgabedatum:"), datePicker);
 
-    TextField amount = new TextField();
+    amount = new TextField();
     amount.setId("make-donation-amount-input");
 
-    VBox amountBox = new VBox(new Label("Menge" + " (" + demandItem.getAmount().toString() + " = max. Anzahl)"),amount);
+    VBox amountBox = new VBox(new Label("Menge" + " (" + selectedDemandItem.getAmount().toString() + " = max. Anzahl)"),amount);
     VBox makeDonationInputVBox = new VBox(dateBox, amountBox);
     makeDonationInputVBox.setId("make-donation-input-VBox");
 
-    Button donateButton = new Button("Spende anmelden");
+    donateButton = new Button("Spende anmelden");
     donateButton.setId("make-donation-button");
-
-    donateButton.addEventHandler(ActionEvent.ACTION, e -> handleDonateButton(e, amount, datePicker) );
 
     makeDonationVBox = new VBox(makeDonationInputVBox, donateButton);
     makeDonationVBox.setId("make-donation-dialog");
@@ -62,48 +84,11 @@ public class MakeDonationDialog {
     dialogScene = new Scene(makeDonationVBox);
     dialogScene.getStylesheets().add(getClass().getResource("/donationsApp.css").toExternalForm());
     Utilities.sceneSetup(owner, dialogStage, dialogScene, "Spende anmelden");
-  }
-
-  private void handleDonateButton(ActionEvent e, TextField amount, DatePicker datePicker) {
-    if(datePicker.getValue() == null) {
-      datePicker.setStyle("-fx-border-color: red; -fx-border-width: 1");
-    } else {
-      datePicker.setStyle(null);
-    }
-
-    if(amount.getText().equals("")) {
-      amount.setStyle("-fx-border-color: red; -fx-border-width: 1");
-    } else {
-      datePicker.setStyle(null);
-    }
-
-    if((datePicker.getValue() != null) && (!amount.getText().equals(""))) {
-
-      Integer intAmount = Integer.parseInt(amount.getText());
-      if (intAmount > 0 && intAmount <= demandItem.getAmount()) {
-
-        //if full demand is covered remove demand item from demand list
-        if(demandItem.getAmount() - intAmount == 0) {
-          dbMock.getInstance().deleteDemand(demandItem);
-        } else { //if not full demand is covered just reduce needed amount
-          dbMock.getInstance().reduceDemand(demandItem, intAmount);
-        }
-
-        dbMock.getInstance().addDonation(new Donation(demandItem, datePicker.getValue(),
-                dbMock.getInstance().getCurrentUser(), intAmount));
-
-        //update displayed list of owner window
-        ownerScene.updateResults();
-        showToken();
-
-      } else {
-        amount.setStyle("-fx-border-color: red; -fx-border-width: 1");
-      }
-    }
+    controller = new MakeDonationDialogController(this);
   }
 
   public void showToken() {
-    Label intro = new Label ("Bitte zeigen weisen Sie diesen Code bei der Abgabe der Spenden vor");
+    Label intro = new Label ("Bitte zeigen Sie diesen Code bei der Abgabe der Spenden vor");
     intro.setId("token-intro-label");
     intro.setPrefWidth(300);
     intro.setWrapText(true);
