@@ -1,4 +1,5 @@
 package at.fhooe.swe4.administration.controller;
+//file ArticleSceneController.java
 
 import at.fhooe.swe4.administration.views.ArticleScene;
 import at.fhooe.swe4.administration.views.ManageArticlesDialog;

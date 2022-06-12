@@ -1,11 +1,11 @@
 package at.fhooe.swe4.administration.views;
+//file DemandScene.java
 
 import at.fhooe.swe4.administration.controller.DemandSceneController;
 import at.fhooe.swe4.model.*;
 import at.fhooe.swe4.Utilities;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.transformation.FilteredList;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;

@@ -1,14 +1,13 @@
 package at.fhooe.swe4.donationsApp.views;
+//File: LoginSceneDonations.java
 
 import at.fhooe.swe4.donationsApp.controller.LoginSceneDonationsController;
-import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
 
 public class LoginSceneDonations {
 

@@ -1,4 +1,5 @@
 package at.fhooe.swe4.model;
+//File: User.java
 
 import java.util.Objects;
 

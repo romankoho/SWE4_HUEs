@@ -1,4 +1,5 @@
 package at.fhooe.swe4.model.enums;
+//File: Category.java
 
 public enum Category {
   CLOTHS("Kleidung"),

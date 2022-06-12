@@ -1,4 +1,5 @@
 package at.fhooe.swe4.donationsApp.views;
+//File: DonationsScene.java
 
 import at.fhooe.swe4.donationsApp.controller.DonationSceneController;
 import at.fhooe.swe4.model.enums.Category;
@@ -30,11 +31,7 @@ public class DonationsScene {
   private  ChoiceBox categoryDropDown;
   private Button addDonationButton;
   private Button deleteFiltersBtn;
-  private DemandItem selectedDemandItem;
 
-  public VBox getFilteredResults() {
-    return filteredResults;
-  }
 
   public Stage getWindow() {
     return window;
@@ -117,9 +114,11 @@ public class DonationsScene {
 
   public HashMap<Button, DemandItem> demandButtonHelperStructure = new HashMap<>();
 
-  public VBox createDemandTile(DemandItem d) {
-    selectedDemandItem = d;
+  public HashMap<Button, DemandItem> getDemandButtonHelperStructure() {
+    return demandButtonHelperStructure;
+  }
 
+  public VBox createDemandTile(DemandItem d) {
     GridPane resultGrid = new GridPane();
     resultGrid.setId("donations-grid");
     resultGrid.add(new Label("Kategorie:"),0,0);

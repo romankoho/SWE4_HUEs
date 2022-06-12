@@ -1,21 +1,25 @@
 package at.fhooe.swe4.model;
+//File: Article.java
 
 import at.fhooe.swe4.model.enums.Category;
 import at.fhooe.swe4.model.enums.Condition;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 public class Article {
   private Integer id;
-  private String name;
-  private String description;
-  private Condition condition;
-  private Category category;
+  private SimpleStringProperty name;
+  private SimpleStringProperty description;
+  private SimpleObjectProperty<Condition> condition;
+  private SimpleObjectProperty<Category> category;
 
   public Article(Integer id, String name, String description, Condition condition, Category category) {
     this.id = id;
-    this.name = name;
-    this.description = description;
-    this.condition = condition;
-    this.category = category;
+    this.name = new SimpleStringProperty(name);
+    this.description = new SimpleStringProperty(description);
+    this.condition = new SimpleObjectProperty<>(condition);
+    this.category = new SimpleObjectProperty<>(category);
   }
 
   @Override
@@ -33,34 +37,34 @@ public class Article {
   }
 
   public String getName() {
-    return name;
+    return name.get();
   }
 
   public void setName(String name) {
-    this.name = name;
+    this.name.set(name);
   }
 
   public String getDescription() {
-    return description;
+    return description.get();
   }
 
   public void setDescription(String description) {
-    this.description = description;
+    this.description.set(description);
   }
 
   public Condition getCondition() {
-    return condition;
+    return condition.get();
   }
 
   public void setCondition(Condition condition) {
-    this.condition = condition;
+    this.condition.set(condition);
   }
 
   public Category getCategory() {
-    return category;
+    return category.get();
   }
 
   public void setCategory(Category category) {
-    this.category = category;
+    this.category.set(category);
   }
 }

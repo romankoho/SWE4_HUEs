@@ -1,4 +1,5 @@
 package at.fhooe.swe4.donationsApp.controller;
+//File: DonationsSceneController.java
 
 import at.fhooe.swe4.donationsApp.views.DonationsScene;
 import at.fhooe.swe4.donationsApp.views.MakeDonationDialog;
@@ -29,9 +30,9 @@ public class DonationSceneController {
   }
 
   public void addEventListenersToResultList(){
-    Set<Button> keySet = view.demandButtonHelperStructure.keySet();
+    Set<Button> keySet = view.getDemandButtonHelperStructure().keySet();
     for(Button b : keySet) {
-      b.addEventHandler(ActionEvent.ACTION, e -> handleAddDonationEvent(e, view.demandButtonHelperStructure.get(b)));
+      b.addEventHandler(ActionEvent.ACTION, e -> handleAddDonationEvent(e, view.getDemandButtonHelperStructure().get(b)));
     }
   }
 
@@ -85,6 +86,7 @@ public class DonationSceneController {
     view.getCategoryDropDown().setValue(null);
 
     view.getFilteredDemand().setPredicate(null);
+    addEventListenersToResultList();
   }
 
   private void handleAddDonationEvent(ActionEvent e, DemandItem demandItem) {
@@ -111,6 +113,7 @@ public class DonationSceneController {
             and(categoryPredicate).and(federalStatePredicate));
 
     view.updateResults();
+    addEventListenersToResultList();
   }
 
 }

@@ -1,6 +1,6 @@
 package at.fhooe.swe4.donationsApp;
+//File DonationsApp.java
 
-import at.fhooe.swe4.donationsApp.views.DonationsScene;
 import at.fhooe.swe4.donationsApp.views.LoginSceneDonations;
 import javafx.application.Application;
 import javafx.stage.Stage;

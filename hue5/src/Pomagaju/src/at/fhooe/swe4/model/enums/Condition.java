@@ -1,4 +1,5 @@
 package at.fhooe.swe4.model.enums;
+//File: Condition.java
 
 public enum Condition {
   NEW("neu"),

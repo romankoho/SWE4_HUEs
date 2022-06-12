@@ -1,4 +1,5 @@
 package at.fhooe.swe4.model.enums;
+//File: Status.java
 
 public enum Status {
   ACTIVE("aktiv"),

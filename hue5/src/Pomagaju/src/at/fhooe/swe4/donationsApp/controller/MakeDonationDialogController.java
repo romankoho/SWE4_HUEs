@@ -1,4 +1,5 @@
 package at.fhooe.swe4.donationsApp.controller;
+//File: MakeDonationDialogController.java
 
 import at.fhooe.swe4.donationsApp.views.MakeDonationDialog;
 import at.fhooe.swe4.model.Donation;

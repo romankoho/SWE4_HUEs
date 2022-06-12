@@ -1,10 +1,9 @@
 package at.fhooe.swe4.administration;
+//File Administration.java
 
-import at.fhooe.swe4.administration.controller.LoginSceneController;
 import at.fhooe.swe4.administration.views.LoginScene;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import sun.rmi.runtime.Log;
 
 public class Administration extends Application {
 

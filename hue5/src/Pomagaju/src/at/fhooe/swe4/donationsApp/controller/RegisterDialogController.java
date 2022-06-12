@@ -1,4 +1,5 @@
 package at.fhooe.swe4.donationsApp.controller;
+//File: RegisterDialogController.java
 
 import at.fhooe.swe4.donationsApp.views.DonationsScene;
 import at.fhooe.swe4.donationsApp.views.RegisterDialog;

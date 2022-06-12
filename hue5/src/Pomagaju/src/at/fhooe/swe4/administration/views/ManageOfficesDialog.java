@@ -1,4 +1,5 @@
 package at.fhooe.swe4.administration.views;
+//file ManageOfficesDialog.java
 
 import at.fhooe.swe4.Utilities;
 import at.fhooe.swe4.administration.controller.ManageOfficesDialogController;

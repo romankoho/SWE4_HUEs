@@ -1,4 +1,5 @@
 package at.fhooe.swe4.administration.controller;
+//file ManageDemandDialogController.java
 
 import at.fhooe.swe4.administration.views.ManageDemandDialog;
 import at.fhooe.swe4.model.Article;
@@ -47,6 +48,9 @@ public class ManageDemandDialogController {
         Integer id = rand.nextInt(10000);
         dbMock.getInstance().addDemand(new DemandItem(id, article, office, intAmount));
         view.getInputAmount().setStyle(null);
+
+        view.getInputAmount().clear();
+        view.getArticleDropDown().setValue(null);
       }
 
     } catch(NumberFormatException error) {
