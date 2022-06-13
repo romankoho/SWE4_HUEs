@@ -14,7 +14,8 @@
 
 #myDonations-pane{
     -fx-alignment: top-right;
-    -fx-padding: 5
+    -fx-padding: 10;
+    -fx-spacing: 10;
 }
 
 #filters-pane {
@@ -119,6 +120,11 @@
 
 #token-VBox{
     -fx-alignment: center;
+}
+
+#button-update{
+    -fx-indent: 10;
+    -fx-spacing: 10;
 }
 
 
