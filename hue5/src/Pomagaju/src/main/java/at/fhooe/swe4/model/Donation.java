@@ -55,6 +55,14 @@ public class Donation implements Serializable {
             ", " + amount.get();
   }
 
+  public Integer getId() {
+    return id;
+  }
+
+  public void setId(Integer id) {
+    this.id = id;
+  }
+
   public DemandItem getRelatedDemand() {
     return relatedDemand.get();
   }

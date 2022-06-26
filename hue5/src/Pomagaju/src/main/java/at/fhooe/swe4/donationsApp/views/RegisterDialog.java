@@ -4,9 +4,6 @@ package at.fhooe.swe4.donationsApp.views;
 import at.fhooe.swe4.Utilities;
 import at.fhooe.swe4.donationsApp.controller.RegisterDialogController;
 import at.fhooe.swe4.model.Model;
-import at.fhooe.swe4.model.User;
-import at.fhooe.swe4.model.dbMock;
-import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -14,8 +11,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import java.util.regex.Pattern;
 
 public class RegisterDialog {
     private Stage window;

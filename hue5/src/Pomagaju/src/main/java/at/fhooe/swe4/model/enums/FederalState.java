@@ -22,4 +22,27 @@ public enum FederalState {
   public String toString() {
     return stringRepresentation;
   }
+
+  public static FederalState fromText(String text) {
+    switch (text) {
+      case "Vorarlberg":
+        return FederalState.VORARLBERG;
+      case "Tirol":
+        return FederalState.TYROL;
+      case "Salzburg":
+        return FederalState.SALZBURG;
+      case "Kärnten":
+        return FederalState.CARINTHIA;
+      case "Niederösterreich":
+        return FederalState.LOWERAUSTRIA;
+      case "Oberösterreich":
+        return FederalState.UPPERAUSTRIA;
+      case "Steiermark":
+        return FederalState.STYRIA;
+      case "Burgenland":
+        return FederalState.BURGENLAND;
+      default:
+        return FederalState.VIEANNA;
+    }
+  }
 }

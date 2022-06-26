@@ -15,4 +15,13 @@ public enum Status {
   public String toString() {
     return stringRepresentation;
   }
+
+  public static Status fromText(String text) {
+    switch (text) {
+      case "aktiv":
+        return Status.ACTIVE;
+      default:
+        return Status.INACTIVE;
+    }
+  }
 }

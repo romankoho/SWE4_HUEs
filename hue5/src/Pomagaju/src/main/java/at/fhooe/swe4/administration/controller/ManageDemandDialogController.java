@@ -26,26 +26,33 @@ public class ManageDemandDialogController {
         throw new RuntimeException(ex);
       }
     });
-    view.getEditDemandBtn().addEventHandler(ActionEvent.ACTION, (e) -> handleEditDemand(e));
+    view.getEditDemandBtn().addEventHandler(ActionEvent.ACTION, (e) -> {
+      try {
+        handleEditDemand(e);
+      } catch (RemoteException ex) {
+        throw new RuntimeException(ex);
+      }
+    });
     view.getOfficeDropDown().setValue(model.getActiveOffice());
   }
 
-  private void handleEditDemand(ActionEvent e) {
+  private void handleEditDemand(ActionEvent e) throws RemoteException {
     DemandItem selectedItem = view.getDemandTable().getSelectionModel().getSelectedItem();
+    int selectedRow = view.getDemandTable().getSelectionModel().getSelectedIndex();
 
+    Article article = (Article)view.getArticleDropDown().getValue();
+    ReceivingOffice office = (ReceivingOffice)view.getOfficeDropDown().getValue();
     String amount = view.getInputAmount().getText();
     Integer intAmount = Integer.parseInt(amount);
 
-    selectedItem.setRelatedArticle((Article) view.getArticleDropDown().getValue());
-    selectedItem.setAmount(intAmount);
-    selectedItem.setRelatedOffice((ReceivingOffice)view.getOfficeDropDown().getValue());
+    model.updateDemand(selectedItem, article, office, intAmount);
     view.getDemandTable().refresh();
+    view.getDemandTable().getSelectionModel().select(selectedRow);
   }
 
   private void handleAddDemand(ActionEvent e) throws RemoteException {
     Article article = (Article)view.getArticleDropDown().getValue();
     ReceivingOffice office = (ReceivingOffice)view.getOfficeDropDown().getValue();
-
     String amount = view.getInputAmount().getText();
 
     try {

@@ -6,7 +6,6 @@ import at.fhooe.swe4.model.ReceivingOffice;
 import at.fhooe.swe4.administration.views.ArticleScene;
 import at.fhooe.swe4.administration.views.DemandScene;
 import at.fhooe.swe4.administration.views.OfficesScene;
-import at.fhooe.swe4.model.dbMock;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;

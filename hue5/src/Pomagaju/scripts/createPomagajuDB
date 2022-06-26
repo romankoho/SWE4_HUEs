@@ -1,0 +1,105 @@
+CREATE SCHEMA IF NOT EXISTS PomagajuDB;
+USE PomagajuDB;
+
+DROP TABLE IF EXISTS DemandItems, Articles, Offices, Donations, Users;
+
+CREATE TABLE DemandItems(
+                            id int AUTO_INCREMENT PRIMARY KEY,
+                            relatedArticle int,
+                            relatedOffice int,
+                            amount int
+);
+
+CREATE TABLE Articles (
+                          id int AUTO_INCREMENT PRIMARY KEY,
+                          name VARCHAR(255),
+                          description VARCHAR(255),
+                          `condition` VARCHAR(60),
+                          category VARCHAR(60));
+
+CREATE TABLE Offices (
+                         id int AUTO_INCREMENT PRIMARY KEY,
+                         name VARCHAR(255),
+                         federalState VARCHAR(60),
+                         district VARCHAR(60),
+                         address VARCHAR(255),
+                         status VARCHAR(60));
+
+CREATE TABLE Donations (
+                           id int AUTO_INCREMENT PRIMARY KEY,
+                           relatedDemand int,
+                           date DATE,
+                           user int,
+                           amount int);
+
+CREATE TABLE Users (
+                       id int AUTO_INCREMENT PRIMARY KEY ,
+                       email VARCHAR(255),
+                       name VARCHAR(255),
+                       password VARCHAR(255));
+
+ALTER TABLE DemandItems add constraint fk_demand_articles foreign key(relatedArticle) references Articles(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE DemandItems add constraint fk_demand_offices foreign key(relatedOffice) references Offices(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE Donations add constraint fk_donations_demand foreign key(relatedDemand) references DemandItems(id) ON UPDATE CASCADE ON DELETE SET NULL ;
+ALTER TABLE Donations add constraint fk_donations_users foreign key(user) references Users(id);
+
+
+INSERT INTO articles (name, description, `condition`, category)
+values('Babynahrung', 'in Gläsern, alle Sorten', 'neu', 'Haltbare Lebensmittel');
+
+INSERT INTO articles (name, description, `condition`, category)
+values('Dicke Jacken', 'für den Winter', 'wenig benutzt', 'Kleidung');
+
+INSERT INTO articles (name, description, `condition`, category)
+values('Damenhygieneartikel', 'alles mögliche', 'neu', 'Hygieneartikel');
+
+INSERT INTO articles (name, description, `condition`, category)
+values('Spielzeug', 'für alle Altersstufen', 'neu', 'andere');
+
+INSERT INTO articles (name, description, `condition`, category)
+values('Handys', 'frei, müssen keine Smartphones sein', 'wenig benutzt', 'Elektronikgeräte');
+
+INSERT INTO offices (name, federalState, district, address, status)
+values('Hilfe für die Ukraine', 'Kärnten', 'Spittal/Drau', 'Lindenstraße 1', 'aktiv');
+
+INSERT INTO offices (name, federalState, district, address, status)
+values('Omas gegen Rechts', 'Wien', 'Alsergrund', 'Porzellangasse', 'aktiv');
+
+INSERT INTO offices (name, federalState, district, address, status)
+values('Caritas Salzburg', 'Salzburg', 'Gnigl', 'Red Bull Gasse', 'aktiv');
+
+INSERT INTO users (email, name, password)
+values ('admin@admin.at', 'admin', 'admin');
+
+INSERT INTO users (email, name, password)
+values ('john.doe@gmail.com', 'John Doe', '1234');
+
+INSERT INTO users (email, name, password)
+values ('jane.doe@gmail.com', 'Jane Doe', 'save');
+
+INSERT INTO demanditems (relatedArticle, relatedOffice, amount)
+values(2,1,7);
+
+INSERT INTO demanditems (relatedArticle, relatedOffice, amount)
+values(1,1,15);
+
+INSERT INTO demanditems (relatedArticle, relatedOffice, amount)
+values(3,1,10);
+
+INSERT INTO demanditems (relatedArticle, relatedOffice, amount)
+values(5,2,20);
+
+INSERT INTO demanditems (relatedArticle, relatedOffice, amount)
+values(1,2,14);
+
+INSERT INTO donations (relatedDemand, date, user, amount)
+VALUES (1, '2022-06-19', 1, 5);
+
+INSERT INTO donations (relatedDemand, date, user, amount)
+VALUES (2, '2022-06-18', 3, 8);
+
+INSERT INTO donations (relatedDemand, date, user, amount)
+VALUES (3, '2022-06-21', 1, 4);
+
+INSERT INTO donations (relatedDemand, date, user, amount)
+VALUES (4, '2022-06-12', 1, 7);

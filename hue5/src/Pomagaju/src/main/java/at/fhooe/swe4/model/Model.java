@@ -4,13 +4,14 @@ import at.fhooe.swe4.model.enums.Category;
 import at.fhooe.swe4.model.enums.Condition;
 import at.fhooe.swe4.model.enums.FederalState;
 import at.fhooe.swe4.model.enums.Status;
+import at.fhooe.swe4.database.Database;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 
 
 public class Model {
@@ -56,7 +57,11 @@ public class Model {
   }
 
   public void addDemand(DemandItem d) throws RemoteException {
-    db.addDemand(d);
+    try {
+      db.addDemand(d);
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
     updateModel();
   }
 
@@ -80,7 +85,11 @@ public class Model {
   }
 
   public void addDonation(Donation d) throws RemoteException {
-    db.addDonation(d);
+    try {
+      db.addDonation(d);
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
     updateModel();
   }
 
@@ -89,7 +98,11 @@ public class Model {
   }
 
   public void addArticle(Article a) throws RemoteException {
-    db.addArticle(a);
+    try {
+      db.addArticle(a);
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
     updateModel();
   }
 
@@ -109,7 +122,11 @@ public class Model {
   }
 
   public void addOffice(ReceivingOffice o) throws RemoteException {
-    db.addOffice(o);
+    try {
+      db.addOffice(o);
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
     updateModel();
   }
 
@@ -133,7 +150,11 @@ public class Model {
   }
 
   public void addUser(String key, User user) throws RemoteException {
-    db.addUser(key, user);
+    try {
+      db.addUser(key, user);
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
     updateModel();
   }
 
@@ -146,7 +167,11 @@ public class Model {
   }
 
   public User getUserByEMail(String email) throws RemoteException {
-    return db.getUserByEMail(email);
+    try {
+      return db.getUserByEMail(email);
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   public void updateModel() throws RemoteException {

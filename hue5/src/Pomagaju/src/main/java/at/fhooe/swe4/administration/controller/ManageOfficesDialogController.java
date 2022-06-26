@@ -60,11 +60,14 @@ public class ManageOfficesDialogController {
 
   private void handleEditOffice(ActionEvent e) throws RemoteException {
     ReceivingOffice selectedItem = view.getOfficesTable().getSelectionModel().getSelectedItem();
+    int selectedRow = view.getOfficesTable().getSelectionModel().getSelectedIndex();
+
     model.updateOffice(
             selectedItem, view.getNameInput().getText(),
             (FederalState)view.getFedStateInput().getValue(), view.getDistInput().getText(),
             view.getAddressInput().getText(), (Status)view.getStatInput().getValue());
 
     view.getOfficesTable().refresh();
+    view.getOfficesTable().getSelectionModel().select(selectedRow);
   }
 }

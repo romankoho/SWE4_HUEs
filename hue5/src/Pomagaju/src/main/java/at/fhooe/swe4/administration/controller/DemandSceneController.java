@@ -145,7 +145,7 @@ public class DemandSceneController {
   private void handleDeleteDemandEvent(ActionEvent e) throws RemoteException {
     DemandItem demandI = view.getDemandTable().getSelectionModel().getSelectedItem();
     if (demandI != null) {
-      model.deleteDemand(demandI);
+      model.reduceDemand(demandI, demandI.getAmount());
     }
   }
 

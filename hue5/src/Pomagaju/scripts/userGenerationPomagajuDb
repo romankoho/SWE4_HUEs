@@ -1,0 +1,34 @@
+DROP USER 'pomagaju';
+
+CREATE USER 'pomagaju' IDENTIFIED BY 'pomagajuUser';
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON pomagajudb.donations
+    TO 'pomagaju'@'%' IDENTIFIED BY 'pomagajuUser';
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON pomagajudb.demanditems
+    TO 'pomagaju'@'%' IDENTIFIED BY 'pomagajuUser';
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON pomagajudb.articles
+    TO 'pomagaju'@'%' IDENTIFIED BY 'pomagajuUser';
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON pomagajudb.offices
+    TO 'pomagaju'@'%' IDENTIFIED BY 'pomagajuUser';
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON pomagajudb.users
+    TO 'pomagaju'@'%' IDENTIFIED BY 'pomagajuUser';
+
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON pomagajudb.donations
+    TO 'pomagaju'@'localhost' IDENTIFIED BY 'pomagajuUser';
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON pomagajudb.demanditems
+    TO 'pomagaju'@'localhost' IDENTIFIED BY 'pomagajuUser';
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON pomagajudb.articles
+    TO 'pomagaju'@'localhost' IDENTIFIED BY 'pomagajuUser';
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON pomagajudb.offices
+    TO 'pomagaju'@'localhost' IDENTIFIED BY 'pomagajuUser';
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON pomagajudb.users
+    TO 'pomagaju'@'localhost' IDENTIFIED BY 'pomagajuUser';

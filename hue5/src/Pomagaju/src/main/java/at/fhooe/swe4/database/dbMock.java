@@ -1,6 +1,7 @@
-package at.fhooe.swe4.model;
+package at.fhooe.swe4.database;
 //File: dbMock.java
 
+import at.fhooe.swe4.model.*;
 import at.fhooe.swe4.model.enums.Category;
 import at.fhooe.swe4.model.enums.Condition;
 import at.fhooe.swe4.model.enums.FederalState;

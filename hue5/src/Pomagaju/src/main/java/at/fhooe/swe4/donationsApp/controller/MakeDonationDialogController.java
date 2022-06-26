@@ -47,12 +47,7 @@ public class MakeDonationDialogController {
       Integer intAmount = Integer.parseInt(view.getAmount().getText());
       if (intAmount > 0 && intAmount <= view.getSelectedDemandItem().getAmount()) {
 
-        //if full demand is covered remove demand item from demand list
-        if(view.getSelectedDemandItem().getAmount() - intAmount == 0) {
-          model.deleteDemand(view.getSelectedDemandItem());
-        } else { //if not full demand is covered just reduce needed amount
-          model.reduceDemand(view.getSelectedDemandItem(), intAmount);
-        }
+        model.reduceDemand(view.getSelectedDemandItem(), intAmount);
 
         Random rand = new Random();
         Integer id = rand.nextInt(10000);

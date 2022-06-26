@@ -3,12 +3,14 @@ import at.fhooe.swe4.model.enums.Category;
 import at.fhooe.swe4.model.enums.Condition;
 import at.fhooe.swe4.model.enums.FederalState;
 import at.fhooe.swe4.model.enums.Status;
+import at.fhooe.swe4.database.Database;
 import org.junit.jupiter.api.*;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -43,7 +45,7 @@ class dbMockTest {
 
   @DisplayName("dbMock.addDemandAddsDemandItem")
   @Test
-  void addDemandAddsDemandItem() throws RemoteException {
+  void addDemandAddsDemandItem() throws RemoteException, SQLException {
     db.addDemand(demandItem1);
     assertThat(db.getDemandItems()).contains(demandItem1);
     assertEquals(1, db.getDemandItems().size());
@@ -75,7 +77,7 @@ class dbMockTest {
 
   @DisplayName("dbMock.deleteDemandWhenDemandIsFoundDeletesDemandItem")
   @Test
-  void deleteDemandWhenDemandIsFoundDeletesDemand() throws RemoteException {
+  void deleteDemandWhenDemandIsFoundDeletesDemand() throws RemoteException, SQLException {
       db.addDemand(demandItem1);
       db.deleteDemand(demandItem1);
       assertThat(db.getDemandItems()).doesNotContain(demandItem1);
@@ -84,7 +86,7 @@ class dbMockTest {
 
   @DisplayName("dbMock.updateDemandWhenInputIsValidUpdatesDemandItem")
   @Test
-  void updateDemandWhenInputIsValidUpdatesDemandItem() throws RemoteException {
+  void updateDemandWhenInputIsValidUpdatesDemandItem() throws RemoteException, SQLException {
     db.addDemand(demandItem1);
     assertEquals(3, db.getDemandItems().get(0).getAmount());
     db.updateDemand(demandItem1, article1, office1, 99);
@@ -101,7 +103,7 @@ class dbMockTest {
 
   @DisplayName("dbMock.updateDemandWhenInputIsValidButDemandNotInDB")
   @Test
-  void updateDemandWhenInputIsValidButDemandNotInDB() throws RemoteException {
+  void updateDemandWhenInputIsValidButDemandNotInDB() throws RemoteException, SQLException {
     db.addDemand(demandItem1);
     List<DemandItem> demandListPreUpdate = db.getDemandItems();
 
@@ -132,7 +134,7 @@ class dbMockTest {
 
   @DisplayName("dbMock.reduceDemandWhenInputIsValid")
   @Test
-  void reduceDemandWhenInputIsValid() throws RemoteException {
+  void reduceDemandWhenInputIsValid() throws RemoteException, SQLException {
     Integer amountPreReduction = demandItem1.getAmount();
     Integer reduction = 2;
     db.addDemand(demandItem1);
@@ -144,7 +146,7 @@ class dbMockTest {
 
   @DisplayName("dbMock.reduceDemandWhenInputIsValidButDemandNotInDB")
   @Test
-  void reduceDemandWhenInputIsValidButDemandNotInDB() throws RemoteException {
+  void reduceDemandWhenInputIsValidButDemandNotInDB() throws RemoteException, SQLException {
     db.addDemand(demandItem1);
     List<DemandItem> demandListPreUpdate = db.getDemandItems();
 
@@ -160,7 +162,7 @@ class dbMockTest {
 
   @DisplayName("dbMock.addDonationAddsDonation")
   @Test
-  void addDonationAddsDonation() throws RemoteException {
+  void addDonationAddsDonation() throws RemoteException, SQLException {
     db.addDonation(donation1);
     assertThat(db.getDonations()).contains(donation1);
     assertEquals(1, db.getDonations().size());
@@ -177,7 +179,7 @@ class dbMockTest {
 
   @DisplayName("dbMock.addArticleAddsArticle")
   @Test
-  void addArticleAddsArticle() throws RemoteException {
+  void addArticleAddsArticle() throws RemoteException, SQLException {
     db.addArticle(article1);
     assertThat(db.getArticles()).contains(article1);
     assertEquals(1, db.getArticles().size());
@@ -202,7 +204,7 @@ class dbMockTest {
 
   @DisplayName("dbMock.deleteArticleWhenArticleIsNotFoundInDb")
   @Test
-  void deleteArticleWhenArticleIsNotFoundInDB() throws RemoteException {
+  void deleteArticleWhenArticleIsNotFoundInDB() throws RemoteException, SQLException {
     db.addArticle(new Article(4, "TestArtikel", "ein Test", Condition.NEW, Category.FOOD));
     Integer sizeBeforeDelete = db.getArticles().size();
 
@@ -213,7 +215,7 @@ class dbMockTest {
 
   @DisplayName("dbMock.deleteArticleWhenDemandIsFoundDeletesArticle")
   @Test
-  void deleteArticleWhenDemandIsFoundDeletesArticle() throws RemoteException {
+  void deleteArticleWhenDemandIsFoundDeletesArticle() throws RemoteException, SQLException {
     db.addArticle(article1);
     db.deleteArticle(article1);
     assertThat(db.getArticles()).doesNotContain(article1);
@@ -222,7 +224,7 @@ class dbMockTest {
 
   @DisplayName("dbMock.updateArticleWhenInputIsValidUpdatesArticle")
   @Test
-  void updateArticleWhenInputIsValidUpdatesArticle() throws RemoteException {
+  void updateArticleWhenInputIsValidUpdatesArticle() throws RemoteException, SQLException {
     db.addArticle(article1);
     assertEquals("Babynahrung", db.getArticles().get(0).getName());
     assertEquals("in Gläsern, alle Sorten", db.getArticles().get(0).getDescription());
@@ -248,7 +250,7 @@ class dbMockTest {
 
   @DisplayName("dbMock.updateArticleWhenInputIsValidButArticleNotInDB")
   @Test
-  void updateArticleWhenInputIsValidButArticleNotInDB() throws RemoteException {
+  void updateArticleWhenInputIsValidButArticleNotInDB() throws RemoteException, SQLException {
     db.addArticle(article1);
     List<Article> articleListPreUpdate = db.getArticles();
 
@@ -264,7 +266,7 @@ class dbMockTest {
 
   @DisplayName("dbMock.addOfficeAddsOffice")
   @Test
-  void addOfficeAddsOffice() throws RemoteException {
+  void addOfficeAddsOffice() throws RemoteException, SQLException {
     db.addOffice(office1);
     assertThat(db.getOffices()).contains(office1);
     assertEquals(1, db.getOffices().size());
@@ -288,7 +290,7 @@ class dbMockTest {
 
   @DisplayName("dbMock.deleteOfficeWhenOfficeIsNotFoundInDb")
   @Test
-  void deleteOfficeWhenOfficeIsNotFoundInDb() throws RemoteException {
+  void deleteOfficeWhenOfficeIsNotFoundInDb() throws RemoteException, SQLException {
     db.addOffice(new ReceivingOffice(43, "Test", FederalState.SALZBURG, "Salzburg",
             "Testadresse", Status.ACTIVE));
     Integer sizeBeforeDelete = db.getOffices().size();
@@ -300,7 +302,7 @@ class dbMockTest {
 
   @DisplayName("dbMock.deleteOfficeWhenOfficeIsFoundDeletesOffice")
   @Test
-  void deleteOfficeWhenOfficeIsFoundDeletesOffice() throws RemoteException {
+  void deleteOfficeWhenOfficeIsFoundDeletesOffice() throws RemoteException, SQLException {
     db.addOffice(office1);
     db.deleteOffice(office1);
     assertThat(db.getOffices()).doesNotContain(office1);
@@ -309,7 +311,7 @@ class dbMockTest {
 
   @DisplayName("dbMock.updateOfficeWhenInputIsValidUpdatesOffice")
   @Test
-  void updateOfficeWhenInputIsValidUpdatesOffice() throws RemoteException {
+  void updateOfficeWhenInputIsValidUpdatesOffice() throws RemoteException, SQLException {
     db.addOffice(office1);
     assertEquals("Hilfe für die Ukraine", db.getOffices().get(0).getName());
     assertEquals(FederalState.CARINTHIA, db.getOffices().get(0).getFederalState());
@@ -338,7 +340,7 @@ class dbMockTest {
 
   @DisplayName("dbMock.updateOfficeWhenInputIsValidButOfficeNotInDB")
   @Test
-  void updateOfficeWhenInputIsValidButOfficeNotInDB() throws RemoteException {
+  void updateOfficeWhenInputIsValidButOfficeNotInDB() throws RemoteException, SQLException {
     db.addOffice(office1);
     List<ReceivingOffice> officesListPreUpdate = db.getOffices();
 
@@ -355,7 +357,7 @@ class dbMockTest {
 
   @DisplayName("dbMock.addUserAddsUser")
   @Test
-  void addUserAddsUser() throws RemoteException {
+  void addUserAddsUser() throws RemoteException, SQLException {
     db.addUser(user1.getEmail(), user1);
     assertThat(db.getUsers()).hasSize(1);
   }
@@ -378,7 +380,7 @@ class dbMockTest {
 
   @DisplayName("dbMock.getUserByEMailReturnsUser")
   @Test
-  void getUserByEMailReturnsUser() throws RemoteException {
+  void getUserByEMailReturnsUser() throws RemoteException, SQLException {
     db.addUser(user1.getEmail(), user1);
     User u = db.getUserByEMail(user1.getEmail());
 

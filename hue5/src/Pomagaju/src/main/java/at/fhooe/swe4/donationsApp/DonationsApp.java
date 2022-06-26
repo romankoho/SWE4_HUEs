@@ -1,10 +1,8 @@
 package at.fhooe.swe4.donationsApp;
 //File DonationsApp.java
 
-import at.fhooe.swe4.Utilities;
-import at.fhooe.swe4.administration.Administration;
 import at.fhooe.swe4.donationsApp.views.LoginSceneDonations;
-import at.fhooe.swe4.model.Database;
+import at.fhooe.swe4.database.Database;
 import at.fhooe.swe4.model.Model;
 import javafx.application.Application;
 import javafx.stage.Stage;

@@ -5,7 +5,6 @@ import at.fhooe.swe4.Utilities;
 import at.fhooe.swe4.administration.controller.ArticleSceneController;
 import at.fhooe.swe4.model.Article;
 import at.fhooe.swe4.model.Model;
-import at.fhooe.swe4.model.dbMock;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;

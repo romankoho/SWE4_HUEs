@@ -23,4 +23,19 @@ public enum Category {
     this.stringRepresentation = category;
   }
 
+  public static Category fromText(String text) {
+    switch (text) {
+      case "Kleidung":
+        return Category.CLOTHS;
+      case "Elektronikgeräte":
+        return Category.ELECTRONICS;
+      case "Haltbare Lebensmittel":
+        return Category.FOOD;
+      case "Hygieneartikel":
+        return Category.HYGIENE;
+      default:
+        return Category.OTHER;
+    }
+  }
+
 }

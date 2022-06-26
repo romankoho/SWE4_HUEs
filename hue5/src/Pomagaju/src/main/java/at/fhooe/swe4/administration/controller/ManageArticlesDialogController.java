@@ -40,12 +40,14 @@ public class ManageArticlesDialogController {
 
   private void handleEditArticle(ActionEvent e) throws RemoteException {
     Article selectedItem = view.getArticlesTable().getSelectionModel().getSelectedItem();
+    int selectedRow = view.getArticlesTable().getSelectionModel().getSelectedIndex();
     model.updateArticle(
             selectedItem, view.getNameInput().getText(),
             view.getDescriptionInput().getText(),(Condition) view.getConditionInput().getValue(),
             (Category) view.getCategoryInput().getValue());
 
     view.getArticlesTable().refresh();
+    view.getArticlesTable().getSelectionModel().select(selectedRow);
   }
 
   private void handleAddArticle(ActionEvent e) throws RemoteException {

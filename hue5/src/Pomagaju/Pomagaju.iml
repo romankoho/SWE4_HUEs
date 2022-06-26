@@ -31,5 +31,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" scope="TEST" name="Maven: org.assertj:assertj-core:3.22.0" level="project" />
+    <orderEntry type="library" name="mariadb.jdbc.java.client" level="project" />
   </component>
 </module>
